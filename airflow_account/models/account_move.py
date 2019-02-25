@@ -25,7 +25,7 @@ class AccountMove(models.Model):
                 if order_id:
                     # our sequence is based on numbered invoices that are not credit notes
                     sequence = 1 + len(order_id.invoice_ids.filtered(
-                        lambda inv: inv.type == 'out_invoice' and inv.state in ('open', 'paid'))
+                        lambda inv: inv.type == 'out_invoice' and inv.state in ('open', 'paid', 'cancel'))
                     )
                     # this single line of code makes me wanna die
                     new_name = invoice.origin[2:] + '{0:02d}'.format(sequence) if invoice.origin.startswith('SO') else invoice.origin + '{0:02d}'.format(sequence)
@@ -34,7 +34,7 @@ class AccountMove(models.Model):
                 if invoice.refund_invoice_id.number:
                     # origin's number + CM + seq
                     sequence = 1 + len(invoice.refund_invoice_id.refund_invoice_ids.filtered(
-                        lambda inv: inv.type == 'out_refund' and inv.state in ('open', 'paid'))
+                        lambda inv: inv.type == 'out_refund' and inv.state in ('open', 'paid', 'cancel'))
                     )
                     new_name = invoice.refund_invoice_id.number + 'CM' + str(sequence)
             if new_name:

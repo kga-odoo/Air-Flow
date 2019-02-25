@@ -24,7 +24,7 @@ class AccountMove(models.Model):
 
                 if order_id:
                     # our sequence is based on numbered invoices that are not credit notes
-                    sequence = len(order_id.invoice_ids.filtered(
+                    sequence = 1 + len(order_id.invoice_ids.filtered(
                         lambda inv: inv.type == 'out_invoice' and inv.state in ('open', 'paid'))
                     )
                     # this single line of code makes me wanna die
@@ -32,8 +32,11 @@ class AccountMove(models.Model):
 
             if invoice.type == 'out_refund':
                 if invoice.refund_invoice_id.number:
-                    # origin's number + CM
-                    new_name = invoice.refund_invoice_id.number + 'CM' + str(len(invoice.refund_invoice_id.refund_invoice_ids))
+                    # origin's number + CM + seq
+                    sequence = 1 + len(invoice.refund_invoice_id.refund_invoice_ids.filtered(
+                        lambda inv: inv.type == 'out_refund' and inv.state in ('open', 'paid'))
+                    )
+                    new_name = invoice.refund_invoice_id.number + 'CM' + str(sequence)
             if new_name:
                 # not sure why we need a loop here... just following the convention
                 for move in self:

@@ -17,26 +17,26 @@ class AccountMove(models.Model):
         if invoice and invoice.origin:
             new_name = ''
 
-            if invoice.type == 'out_invoice':
-                # retrieve the SO to get sequence -> we need to know how many numbered invoices are there already
-                related_sols = invoice.invoice_line_ids.mapped('sale_line_ids')
-                order_id = related_sols[0].order_id if related_sols else False
+            # retrieve the SO to get sequence -> we need to know how many numbered invoices are there already
+            related_sols = invoice.invoice_line_ids.mapped('sale_line_ids')
+            order_id = related_sols[0].order_id if related_sols else False
 
-                if order_id:
+            if order_id:
+                if invoice.type == 'out_invoice':
+
                     # our sequence is based on numbered invoices that are not credit notes
                     sequence = 1 + len(order_id.invoice_ids.filtered(
-                        lambda inv: inv.type == 'out_invoice' and inv.state in ('open', 'paid', 'cancel'))
+                        lambda inv: inv.type == 'out_invoice' and inv.state in ('open', 'paid'))
                     )
                     # this single line of code makes me wanna die
                     new_name = invoice.origin[2:] + '{0:02d}'.format(sequence) if invoice.origin.startswith('SO') else invoice.origin + '{0:02d}'.format(sequence)
 
-            if invoice.type == 'out_refund':
-                if invoice.refund_invoice_id.number:
-                    # origin's number + CM + seq
-                    sequence = 1 + len(invoice.refund_invoice_id.refund_invoice_ids.filtered(
-                        lambda inv: inv.type == 'out_refund' and inv.state in ('open', 'paid', 'cancel'))
+                elif invoice.type == 'out_refund':
+                    # origin's number remove last 2 digit + CM + seq (based on SO)
+                    sequence = 1 + len(order_id.invoice_ids.filtered(
+                        lambda inv: inv.type == 'out_refund' and inv.state in ('open', 'paid'))
                     )
-                    new_name = invoice.refund_invoice_id.number + 'CM' + str(sequence)
+                    new_name = invoice.refund_invoice_id.number[:-2] + 'CM' + str(sequence)
             if new_name:
                 # not sure why we need a loop here... just following the convention
                 for move in self:

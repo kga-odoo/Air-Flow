@@ -73,7 +73,7 @@ class AccountMove(models.Model):
                             # based on the last invoice's name
                             try:
                                 seq = int(invoices[-1].number[-1:]) + 1
-                                new_name = invoice.origin[2:] + '{0:01d}'.format(seq)
+                                new_name = invoice.origin[2:] + 'CM{0:01d}'.format(seq)
                             except ValueError:
                                 pass
 

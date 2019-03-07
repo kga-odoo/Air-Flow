@@ -13,7 +13,6 @@ class AccountMove(models.Model):
 
     @api.multi
     def post(self):
-
         invoice = self._context.get('invoice', False)
         if invoice:
             # invoice has types:
@@ -40,8 +39,5 @@ class AccountMove(models.Model):
                 # not sure why we need a loop here... just following the convention
                 for move in self:
                     move.name = new_name
-
-            res = super(AccountMove, self).post()
-
-            return res
-
+        res = super(AccountMove, self).post()
+        return res

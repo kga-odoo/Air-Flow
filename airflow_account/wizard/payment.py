@@ -4,6 +4,8 @@
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
 
+from odoo.addons import decimal_precision as dp
+
 
 class AccountRegisterDiscountedPayments(models.TransientModel):
     """
@@ -22,7 +24,7 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
     gain_account_id = fields.Many2one('account.account', string='Gain Account')
     gain_account_label = fields.Char(string='Write-Off Label')
     payment_allocation_ids = fields.One2many('account.discounted.payment.allocation', 'discounted_payment_id', string='Payment Allocations')
-    total_available_discount = fields.Float(compute='_compute_amount', string='Total Available Discount')
+    total_available_discount = fields.Float(compute='_compute_amount', string='Total Available Discount', digits=dp.get_precision('Discount'))
     total_paid_amount = fields.Float(compute='_compute_amount', string='Total Paid Amount')
     total_to_pay = fields.Float(compute='_compute_amount', string='Total To Pay')
     payment_difference = fields.Float(compute='_compute_amount', string='Payment Difference')

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Airflow Background header/footer layout -->
+        <template id="external_layout_background_airflow">
+            <div class="header o_background_header">
+                <div class="pull-right">
+                    <h3 class="mt0 text-right" t-field="company.report_header"/>
+                </div>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-left"/>
+                <div class="pull-left company_address">
+                    <div>
+                        <strong t-field="company.partner_id.name"/>
+                    </div>
+                    <span t-field="company.partner_id"
+                        t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                    <t t-if="company.phone"><span t-field="company.phone"/></t>
+                    <br><t t-if="company.email"><span t-field="company.email"/></t></br>
+                </div>
+                <div class="clearfix mb8"/>
+            </div>
+
+            <div class="article o_report_layout_background">
+                <t t-raw="0" />
+            </div>
+
+            <div class="footer o_background_footer">
+                <div class="text-center">
+                    <ul class="list-inline">
+                        <li t-if="company.website"><i class="fa fa-globe"/> <span t-field="company.website"/></li>
+                    </ul>
+                    <div t-field="company.report_footer"/>
+                    <div class="text-muted">
+                        Page:
+                        <span class="page"/>
+                        of
+                        <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Airflow Boxed header/footer layout -->
+        <template id="external_layout_boxed_airflow">
+            <div class="header o_boxed_header">
+                <div class="row mb8">
+                    <div class="col-xs-6">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/>
+                    </div>
+                    <div class="col-xs-6 text-right mb4">
+                        <h4 class="mt0" t-field="company.report_header"/>
+                        <div name="company_address" class="mb4">
+                            <span class="company_address" t-field="company.partner_id"
+                                t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                            <t t-if="company.phone"><span t-field="company.phone"/></t>
+                            <br><t t-if="company.email"><span t-field="company.email"/></t></br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article o_report_layout_boxed">
+              <t t-raw="0" />
+            </div>
+
+            <div class="footer o_boxed_footer">
+                <div class="text-center">
+                    <ul class="list-inline">
+                        <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                    </ul>
+                    <div t-field="company.report_footer"/>
+                    <div>
+                        Page: <span class="page"/> / <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Airflow Clean header/footer layout -->
+        <template id="external_layout_clean_airflow">
+            <div class="header o_clean_header">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/>
+                    </div>
+                    <div class="col-xs-5 col-xs-offset-1" name="company_address">
+                            <strong><t t-if="company.name"><span t-field="company.name"/></t></strong>
+                            <span class="company_address" t-field="company.partner_id"
+                                t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                            <t t-if="company.phone"><span t-field="company.phone"/></t>
+                            <br><t t-if="company.email"><span t-field="company.email"/></t></br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article o_report_layout_clean">
+                <t t-raw="0" />
+            </div>
+
+            <div class="footer o_clean_footer">
+                <div class="row mt8">
+                    <div class="col-xs-3">
+                        <span t-field="company.report_footer"/>
+                    </div>
+                    <div class="col-xs-4 text-right">
+                        <ul class="list-unstyled">
+                            <li t-if="company.website"><span t-field="company.website"/></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-4">
+                        <h4 class="mt0 mb0 text-uppercase" t-field="company.report_header"/>
+                    </div>
+                    <div class="col-xs-1">
+                        <ul class="list-inline pagenumber pull-right text-center">
+                            <li><strong><span class="page"/></strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Airflow Standard header/footer layout -->
+        <template id="external_layout_standard_airflow">
+            <div class="header">
+                <div class="row">
+                    <div class="col-xs-3 mb4">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
+                    </div>
+                    <div class="col-xs-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
+                </div>
+                <div t-if="company.logo or company.report_header" class="row zero_min_height">
+                    <div class="col-xs-12">
+                        <div style="border-bottom: 1px solid black;"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6" name="company_address">
+                        <span t-field="company.partner_id"
+                            t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
+                        <t t-if="company.phone"><span t-field="company.phone"/></t>
+                        <br><t t-if="company.email"><span t-field="company.email"/></t></br>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article o_report_layout_standard">
+                <t t-raw="0" />
+            </div>
+
+            <div class="footer">
+                <div class="text-center" style="border-top: 1px solid black;">
+                    <ul class="list-inline mb4">
+                        <li t-if="company.website">Web: <span t-field="company.website"/></li>
+                    </ul>
+
+                    <div name="financial_infos">
+                        <span t-field="company.report_footer"/>
+                    </div>
+
+                    <div class="text-muted">
+                        Page: <span class="page"/> / <span class="topage"/>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Extend the external layout to show specific invoice headers/footers -->
+        <template id="inherit_external_layout_airflow" inherit_id="web.external_layout">
+            <xpath expr="//t[@t-call='web.external_layout_background']" position="replace">
+                <t t-if="doc_model == 'account.invoice'">
+                    <t t-call="airflow_account.external_layout_background_airflow"><t t-raw="0"/></t>
+                </t>
+                <t t-else="">
+                    <t t-call="web.external_layout_background"><t t-raw="0"/></t>
+                </t>
+            </xpath>
+
+            <xpath expr="//t[@t-call='web.external_layout_boxed']" position="replace">
+                <t t-if="doc_model == 'account.invoice'">
+                    <t t-call="airflow_account.external_layout_boxed_airflow"><t t-raw="0"/></t>
+                </t>
+                <t t-else="">
+                    <t t-call="web.external_layout_boxed"><t t-raw="0"/></t>
+                </t>
+            </xpath>
+
+            <xpath expr="//t[@t-call='web.external_layout_clean']" position="replace">
+                <t t-if="doc_model == 'account.invoice'">
+                    <t t-call="airflow_account.external_layout_clean_airflow"><t t-raw="0"/></t>
+                </t>
+                <t t-else="">
+                    <t t-call="web.external_layout_clean"><t t-raw="0"/></t>
+                </t>
+            </xpath>
+
+            <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+                <t t-if="doc_model == 'account.invoice'">
+                    <t t-call="airflow_account.external_layout_standard_airflow"><t t-raw="0"/></t>
+                </t>
+                <t t-else="">
+                    <t t-call="web.external_layout_standard"><t t-raw="0"/></t>
+                </t>
+            </xpath>
+        </template>
+
+
+        <!-- Modifications done to the invoice report itself -->
+        <template id="sale_report_invoice_document_inherit_airflow" inherit_id="sale.report_invoice_document_inherit_sale">
+            <xpath expr="//div[@t-field='o.partner_id']" position="before">
+                <strong>Billing Address:</strong>
+            </xpath>
+
+            <xpath expr="//div[@t-if='o.name']//strong" position="replace">
+                <strong>Customer PO:</strong>
+            </xpath>
+
+            <xpath expr="//div[hasclass('row', 'mt32', 'mb32')]" position="inside">
+                <div class="col-xs-2" t-if="o.proj_manager">
+                    <strong>Ship Date:</strong>
+                    <t t-foreach="o.sale_order_id.picking_ids" t-as="p">
+                        <span t-field="p.scheduled_date" t-options='{"widget": "date"}'/><span t-if="not p_last">,</span>
+                    </t>
+                </div>
+                <div class="col-xs-2" t-if="o.proj_manager">
+                    <strong>Shipping Method:</strong>
+                    <t t-foreach="o.sale_order_id.picking_ids" t-as="p">
+                        <span t-field="p.carrier_id.name"/><span t-if="not p_last">,</span>
+                    </t>
+                </div>
+                <div class="col-xs-2" t-if="o.proj_manager">
+                    <strong>Project Manager:</strong>
+                    <p t-field="o.proj_manager"/>
+                </div>
+                <div class="col-xs-2" t-if="o.proj_name">
+                    <strong>Project Name:</strong>
+                    <p t-field="o.proj_name"/>
+                </div>
+                <div class="col-xs-2" t-if="o.team_id">
+                    <strong>Sales Rep:</strong>
+                    <p>
+                        <nobr><span t-field="o.team_id.user_id"/>,</nobr>
+                        <nobr><span t-field="o.team_id.phone"/>,</nobr>
+                        <nobr><span t-field="o.team_id.email"/></nobr>
+                    </p>
+                </div>
+            </xpath>
+
+            <!-- Replace Tax label with Sales Tax or Tax Exempt in the case of 0 tax -->
+            <xpath expr="//div[hasclass('clearfix')]//t[@t-foreach='o._get_tax_amount_by_group()']//tr" position="replace">
+                <tr style="border-bottom:1px solid #dddddd;">
+                    <t t-if="o.amount_tax">
+                        <t t-if="o.amount_tax > 0.0">
+                            <td><span>Sales Tax</span></td>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <td><span>Tax Exempt</span></td>
+                    </t>
+                    <td class="text-right">
+                        <span t-esc="amount_by_group[3]" />
+                    </td>
+                </tr>
+            </xpath>
+            <!-- Remove the Unit Amount and Taxes column -->
+            <xpath expr="//table/thead/tr" position="replace">
+                <tr>
+                    <th>Description</th>
+                    <th class="hidden">Source Document</th>
+                    <th class="text-right">Quantity</th>
+                    <th t-if="display_discount" class="text-right">Disc.(%)</th>
+                    <th class="text-right">Amount</th>
+                </tr>
+            </xpath>
+            <xpath expr="//table/tbody/tr[@t-foreach='o.invoice_line_ids']" position="replace">
+                <tr t-foreach="o.invoice_line_ids" t-as="l">
+                    <td><span t-field="l.name"/></td>
+                    <td class="hidden"><span t-field="l.origin"/></td>
+                    <td class="text-right">
+                        <span t-field="l.quantity"/>
+                        <span t-field="l.uom_id"  groups="product.group_uom"/>
+                    </td>
+                    <td t-if="display_discount" class="text-right">
+                        <span t-field="l.discount"/>
+                    </td>
+                    <td class="text-right" id="subtotal">
+                        <span t-field="l.price_subtotal"
+                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                    </td>
+                </tr>
+            </xpath>
+            <!-- Remove trailing column boxes when invoice lines < 5 -->
+            <xpath expr="//tbody[hasclass('invoice_tbody')]//tr[last()]//td[last()-1]" position="replace"/>
+            <xpath expr="//tbody[hasclass('invoice_tbody')]//tr[last()]//td[last()]" position="replace"/>
+
+            <!-- Remove Source Document -->
+            <xpath expr="//div[@t-if='o.origin']" position="replace"/>
+        </template>
+
+        <template id="report_invoice_document_inherit_airflow" inherit_id="account.report_invoice_document">
+            <xpath expr="//address[@t-field='o.partner_id']" position="before">
+                <strong>Billing Address:</strong>
+            </xpath>
+        </template>
+    </data>
+</odoo>

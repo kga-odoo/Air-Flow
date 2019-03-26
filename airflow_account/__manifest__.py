@@ -7,15 +7,15 @@
 What is the business use case for this development?
 Air Flow Account
 ================
-* Client is bringing over their orders via API and they have their own SO numbers that they would like to have referenced in the Invoice number to simplify their records. They understand Sale can have more than 1 invoice so they are requesting a sequence to be added after the SO number. 
+* Client is bringing over their orders via API and they have their own SO numbers that they would like to have referenced in the Invoice number to simplify their records. They understand Sale can have more than 1 invoice so they are requesting a sequence to be added after the SO number.
 Specification :
 Air Flow Account
 ================
 Sales order number example: SO190005AGA01
 This comes over as the source document on the Invoice so feel free to code based on Source Doc or on related SO number.
 The Invoice number should
-    1) remove leading "SO", 
-    2) Include the full SO number 
+    1) remove leading "SO",
+    2) Include the full SO number
     3) Add a 2 digit sequence starting with 00 after.
 Air Flow Account
 ================
@@ -35,7 +35,7 @@ Invoices:
         4c. I think we need a scheduled action to compute the available discount daily or have it update when user uses the below action.
 
 Action:
-1. Create a new action “Register Discounted Payment” or build off of the existing one. Please display the same action in Customer Invoice Menus + Vendor Bills Menus. 
+1. Create a new action “Register Discounted Payment” or build off of the existing one. Please display the same action in Customer Invoice Menus + Vendor Bills Menus.
 2. Invoice changes :
     2a. Select multiple invoices for same Vendor (required) > action > Register Discounted Payment
     2b. If not same Vendor, produce a blocking error.
@@ -57,19 +57,25 @@ Register Payment Screen:
 Specification Custom Check Edits:
 
 Here's the request, I will add to the task:
-Adding in the requested Check PDF changes. 
+Adding in the requested Check PDF changes.
 1. Replace Odoo Bill Number with Vendor Reference Field.
-2. Payment amount column needs to reflect the actual payment being sent, not a calculation. 
-3a. Remove Balance Due Column, Vendor never needs to see this. 
+2. Payment amount column needs to reflect the actual payment being sent, not a calculation.
+3a. Remove Balance Due Column, Vendor never needs to see this.
 3b. Replace with column for Discount Amount. This should be the discount set at the time of using the new action to register discounted payment.
-4. When using action to register discounted payment, make sure invoices not being paid do not show up on the check. 
+4. When using action to register discounted payment, make sure invoices not being paid do not show up on the check.
       3a. if you delete a line item this should not show on check details
       3b. if invoice being paid is set to $0 discount, $0 payment, and Leave open, this should not show on check details
 
 Functional Test:
-    Test 1. If invoice is for $2,000, but there's a $200 discount, and $1,800 payment, then the discount column should show $200 and the payment amount should show $1,800.  
+    Test 1. If invoice is for $2,000, but there's a $200 discount, and $1,800 payment, then the discount column should show $200 and the payment amount should show $1,800.
     Test 2. If invoice is for $1,500, but there's a $100 discount, and $1,300 payment with an additional $100 write off, and the invoice is closed, then the discount column should show $100, the payment amount should show $1,300.
     Test 3. If invoice is for $1,500, but there's $100 discount, and $1,200 payment, but the invoice is still open, then the discount column should show $100, and payment should show $1,200.
+
+Air Flow Account Invoice Report Modifications
+=============================================
+Task ID: 1950508
+Custom modifications to the invoice report.
+
 
     """,
     'license': 'OEEL-1',
@@ -89,6 +95,7 @@ Functional Test:
 
         # reports
         'report/print_check.xml',
+        'report/account_invoice_report.xml',
 
     ],
     'demo': [],

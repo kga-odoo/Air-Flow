@@ -8,3 +8,7 @@ class SaleOrder(models.Model):
     number_of_invoices = fields.Integer('# of Invoices', readonly=True, help='For internal usage only')
     number_of_credit_notes = fields.Integer('# of Credit Notes', readonly=True, help='For internal usage only')
 
+    proj_manager = fields.Many2one('res.users', string="Project Manager", default=False, store=True)
+    proj_name = fields.Char(string="Project Name", default=False, store=True)
+
+    

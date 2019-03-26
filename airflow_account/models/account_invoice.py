@@ -16,6 +16,19 @@ class AccountInvoice(models.Model):
     available_discount = fields.Float(compute='_compute_available_discount', inverse='_set_available_discount', string='Available Discount')
     actual_discount = fields.Float(string='Actual Discount', copy=False)  # a discount is used at the Register Payment Discount screen
 
+    sale_order_id = fields.Many2one('sale.order',compute="_compute_origin_sale", string="Original Sale Order",store=True)
+    proj_manager = fields.Many2one('res.users', related='sale_order_id.proj_manager', string="Project Manager", default=False, store=True)
+    proj_name = fields.Char(related='sale_order_id.proj_name', string="Project Name", default=False, store=True)
+
+    @api.multi
+    @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
+    def _compute_origin_sale(self):
+        for account in self:
+            if account.invoice_line_ids:
+                if account.invoice_line_ids[0].sale_line_ids:
+                    cur_order = account.invoice_line_ids[0].sale_line_ids[0].order_id
+                    account.sale_order_id = cur_order
+
     @api.multi
     @api.depends('payment_term_id', 'payment_term_id.early_payment_days', 'date_invoice')
     def _compute_early_discount_payment_due_date(self):

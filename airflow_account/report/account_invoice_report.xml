@@ -216,12 +216,12 @@
             </xpath>
 
             <xpath expr="//div[hasclass('row', 'mt32', 'mb32')]" position="inside">
-                <div class="col-xs-2" t-if="o.proj_manager">
+                <!-- <div class="col-xs-2" t-if="o.proj_manager">
                     <strong>Ship Date:</strong>
                     <t t-foreach="o.sale_order_id.picking_ids" t-as="p">
                         <span t-field="p.scheduled_date" t-options='{"widget": "date"}'/><span t-if="not p_last">,</span>
                     </t>
-                </div>
+                </div> -->
                 <div class="col-xs-2" t-if="o.proj_manager">
                     <strong>Shipping Method:</strong>
                     <t t-foreach="o.sale_order_id.picking_ids" t-as="p">

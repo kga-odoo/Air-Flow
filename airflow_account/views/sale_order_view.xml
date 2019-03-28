@@ -11,4 +11,17 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Sale channel view -->
+    <record id="view_crm_team_form_inherit_air_flow" model="ir.ui.view">
+        <field name="name">crm.team.form.air.flow</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="sales_team.crm_team_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='right']" position="inside">
+                <field name="phone"/>
+                <field name="email"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>

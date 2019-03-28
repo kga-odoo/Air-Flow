@@ -40,11 +40,11 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group//group[1]" position="inside">
+            <xpath expr="//group[1]//group[1]" position="inside">
                 <field name="proj_manager"/>
                 <field name="proj_name"/>
             </xpath>
-            <xpath expr="//group//group[2]" position="inside">
+            <xpath expr="//group[1]//group[2]" position="inside">
                 <field name="ship_date"/>
                 <field name="ship_method"/>
             </xpath>

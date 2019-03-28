@@ -92,6 +92,7 @@ Custom modifications to the invoice report.
         # views
         'views/account_payment_term_view.xml',
         'views/account_invoice_view.xml',
+        'views/sale_order_view.xml',
 
         # reports
         'report/print_check.xml',

@@ -12,9 +12,15 @@
 Air Flow Sale
 ================
 * Analytic account at So line level instead of SO
+
+Air Flow Sale: Vendor Bill link to SO
+======================================
+This company has many dropships. Vendor Bill and Purchase Orders needs to display a direct link to Sales Order. Researching Source Number takes too much time.
+
+
     """,
     'category': 'Custom Development',
-    'depends': ['sale'],
+    'depends': ['sale', 'purchase', 'stock_dropshipping'],
     'data': [
 
         # views

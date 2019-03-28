@@ -239,9 +239,15 @@
                 <div class="col-xs-2" t-if="o.team_id">
                     <strong>Sales Rep:</strong>
                     <p>
-                        <nobr><span t-field="o.team_id.user_id"/>,</nobr>
-                        <nobr><span t-field="o.team_id.phone"/>,</nobr>
-                        <nobr><span t-field="o.team_id.email"/></nobr>
+                        <t t-if="o.team_id.user_id">
+                            <nobr><span t-field="o.team_id.user_id"/>,</nobr>
+                        </t>
+                        <t t-if="o.team_id.phone">
+                            <nobr><span t-field="o.team_id.phone"/>,</nobr>
+                        </t>
+                        <t t-if="o.team_id.email">
+                            <nobr><span t-field="o.team_id.email"/></nobr>
+                        </t>
                     </p>
                 </div>
             </xpath>

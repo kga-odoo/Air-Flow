@@ -19,6 +19,8 @@ class AccountInvoice(models.Model):
     sale_order_id = fields.Many2one('sale.order',compute="_compute_origin_sale", string="Original Sale Order",store=True)
     proj_manager = fields.Many2one('res.users', related='sale_order_id.proj_manager', string="Project Manager", default=False, store=True)
     proj_name = fields.Char(related='sale_order_id.proj_name', string="Project Name", default=False, store=True)
+    ship_date = fields.Date(string="Ship Date")
+    ship_method = fields.Many2one('delivery.carrier', string="Shipping Method")
 
     @api.multi
     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')

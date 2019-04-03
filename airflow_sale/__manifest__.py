@@ -25,7 +25,8 @@ This company has many dropships. Vendor Bill and Purchase Orders needs to displa
 
         # views
         'views/sale_view.xml',
-
+        'views/purchase_view.xml',
+        'views/vendor_bill_view.xml',
     ],
     'demo': [],
     'qweb': [],

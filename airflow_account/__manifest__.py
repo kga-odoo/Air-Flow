@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': 'airflow: sale',
+    'name': 'Airflow: Account',
     'summary': 'Invoice Sequence to Reference SO Number',
     'description':
     """
@@ -81,7 +81,7 @@ Custom modifications to the invoice report.
     'license': 'OEEL-1',
     'author': 'Odoo Inc',
     'version': '0.1',
-    'depends': ['sale_management', 'l10n_us_check_printing'],
+    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery'],
     'data': [
 
         # security

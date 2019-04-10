@@ -9,6 +9,10 @@
                 <field name="proj_manager"/>
                 <field name="proj_name"/>
             </xpath>
+            <xpath expr="//group[1]//group[2]" position="inside">
+                <field name="ship_date"/>
+                <field name="ship_method"/>
+            </xpath>
         </field>
     </record>
 

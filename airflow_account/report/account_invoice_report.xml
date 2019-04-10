@@ -216,11 +216,11 @@
             </xpath>
 
             <xpath expr="//div[hasclass('row', 'mt32', 'mb32')]" position="inside">
-                <div class="col-xs-2" t-if="o.proj_manager">
+                <div class="col-xs-2" t-if="o.ship_date">
                     <strong>Ship Date:</strong>
                     <p t-field="o.ship_date"/>
                 </div>
-                <div class="col-xs-2" t-if="o.proj_manager">
+                <div class="col-xs-2" t-if="o.ship_method">
                     <strong>Shipping Method:</strong>
                     <p t-field="o.ship_method"/>
                 </div>
@@ -235,15 +235,9 @@
                 <div class="col-xs-2" t-if="o.team_id">
                     <strong>Sales Rep:</strong>
                     <p>
-                        <t t-if="o.team_id.user_id">
-                            <nobr><span t-field="o.team_id.user_id"/>,</nobr>
-                        </t>
-                        <t t-if="o.team_id.phone">
-                            <nobr><span t-field="o.team_id.phone"/>,</nobr>
-                        </t>
-                        <t t-if="o.team_id.email">
-                            <nobr><span t-field="o.team_id.email"/></nobr>
-                        </t>
+                        <nobr t-if="o.team_id.name"><span t-field="o.team_id.name"/><span t-if="o.team_id.phone">,</span></nobr>
+                        <nobr t-if="o.team_id.phone"><span t-field="o.team_id.phone"/><span t-if="o.team_id.email">,</span></nobr>
+                        <nobr t-if="o.team_id.email"><span t-field="o.team_id.email"/></nobr>
                     </p>
                 </div>
             </xpath>

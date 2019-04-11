@@ -81,7 +81,7 @@ Custom modifications to the invoice report.
     'license': 'OEEL-1',
     'author': 'Odoo Inc',
     'version': '0.1',
-    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery'],
+    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery', 'account'],
     'data': [
 
         # security

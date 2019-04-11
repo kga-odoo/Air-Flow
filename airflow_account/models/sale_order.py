@@ -11,5 +11,5 @@ class SaleOrder(models.Model):
     proj_manager = fields.Many2one('res.partner', string="Project Manager", default=False, store=True)
     proj_name = fields.Char(string="Project Name", default=False, store=True)
 
-    ship_date = fields.Date(string="Ship Date")
-    ship_method = fields.Many2one('delivery.carrier', string="Shipping Method")
+    ship_date = fields.Date(string="Ship Date", default=False, store=True)
+    ship_method = fields.Many2one('delivery.carrier', string="Shipping Method", default=False, store=True)

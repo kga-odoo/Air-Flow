@@ -13,4 +13,5 @@ class AccountInvoice(models.Model):
     @api.depends('invoice_line_ids', 'invoice_line_ids.purchase_id')
     def _compute_origin_sale(self):
         for bill in self.filtered(lambda b: b.invoice_line_ids and b.invoice_line_ids[0].purchase_id):
-            bill.orig_purchase_id = bill.invoice_line_ids[0].purchase_id
+            purchase_ids = bill.mapped('invoice_line_ids.purchase_id')
+            bill.orig_purchase_id = purchase_ids[0] if purchase_ids else False

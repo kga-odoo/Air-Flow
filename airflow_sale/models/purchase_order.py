@@ -11,4 +11,5 @@ class PurchaseOrder(models.Model):
     @api.depends('order_line', 'order_line.sale_line_id', 'order_line.sale_line_id.order_id')
     def _compute_origin_sale(self):
         for purchase in self.filtered(lambda p: p.order_line and p.order_line[0].sale_line_id):
-            purchase.sale_order_id = purchase.order_line[0].sale_line_id.order_id
+            sale_ids = purchase.mapped('order_line.sale_line_id.order_id')
+            purchase.sale_order_id = sale_ids[0] if sale_ids else False

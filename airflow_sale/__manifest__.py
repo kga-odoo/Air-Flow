@@ -15,6 +15,7 @@ Air Flow Sale
 
 Air Flow Sale: Vendor Bill link to SO
 ======================================
+ID #1957822
 This company has many dropships. Vendor Bill and Purchase Orders needs to display a direct link to Sales Order. Researching Source Number takes too much time.
 
 

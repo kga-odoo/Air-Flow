@@ -5,12 +5,25 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
-            <field name='cash_rounding_id' position="after">
-                <field name="early_discount" invisible="1"/>
-                <field name="ed_payment_due_date" invisible="1"/>
-                <field name="early_discount_amount" invisible="1"/>
-                <field name="available_discount" invisible="1"/>
-            </field>
+            <data>
+                <field name='cash_rounding_id' position="after">
+                    <field name="early_discount" invisible="1"/>
+                    <field name="ed_payment_due_date" invisible="1"/>
+                    <field name="early_discount_amount" invisible="1"/>
+                    <field name="available_discount" invisible="1"/>
+                </field>
+                <xpath expr="//group[1]//group[1]" position="inside">
+                    <field name="proj_manager"/>
+                    <field name="proj_name"/>
+                </xpath>
+                <xpath expr="//group[1]//group[2]" position="inside">
+                    <field name="ship_date"/>
+                    <field name="ship_method"/>
+                </xpath>
+                <field name="date_due" position="after">
+                    <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
+                </field>
+            </data>
         </field>
     </record>
 
@@ -38,19 +51,4 @@
         </field>
     </record>
 
-    <record id="view_account_invoice_form_inherit_air_flow" model="ir.ui.view">
-        <field name="name">account.invoice.form.air.flow</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//group[1]//group[1]" position="inside">
-                <field name="proj_manager"/>
-                <field name="proj_name"/>
-            </xpath>
-            <xpath expr="//group[1]//group[2]" position="inside">
-                <field name="ship_date"/>
-                <field name="ship_method"/>
-            </xpath>
-        </field>
-    </record>
 </odoo>

@@ -1,0 +1,41 @@
+--- account_invoice.py
++++ account_invoice.py
+@@ -21,6 +21,7 @@ class AccountInvoice(models.Model):
+     proj_name = fields.Char(related='sale_id.proj_name', string="Project Name", default=False, store=True)
+     ship_date = fields.Date(related='sale_id.ship_date', string="Ship Date", default=False, store=True)
+     ship_method = fields.Many2one('delivery.carrier', related='sale_id.ship_method', string="Shipping Method", default=False, store=True)
++    paid_date = fields.Date(string='Paid Date')
+ 
+     @api.multi
+     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
+@@ -70,3 +71,10 @@ class AccountInvoice(models.Model):
+     def onchange_do_not_update_discount(self):
+         if self.do_not_update_discount:
+             self.available_discount_hidden = self.available_discount
++
++    @api.multi
++    def write(self, vals):
++        """Inherit to set the paid date"""
++        if vals.get('state') == 'paid':
++            vals['paid_date'] = fields.Date.context_today(self)
++        return super(AccountInvoice, self).write(vals)
+--- account_invoice_view.xml
++++ account_invoice_view.xml
+@@ -32,6 +32,9 @@
+             <xpath expr="//form//group[hasclass('oe_subtotal_footer')]//field[@name='residual']" position="after">
+                 <field name="actual_discount" readonly="1" attrs="{'invisible': [('state', '!=', 'paid')]}"/>
+             </xpath>
++            <field name="date_due" position="after">
++                <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
++            </field>
+         </field>
+     </record>
+ 
+@@ -45,6 +48,7 @@
+                 <field name="proj_name"/>
+             </xpath>
+             <xpath expr="//group[1]//group[2]" position="inside">
++                <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
+                 <field name="ship_date"/>
+                 <field name="ship_method"/>
+             </xpath>

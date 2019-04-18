@@ -15,6 +15,7 @@ class AccountInvoice(models.Model):
     do_not_update_discount = fields.Boolean(string='Do not update discount')
     available_discount = fields.Float(compute='_compute_available_discount', inverse='_set_available_discount', string='Available Discount')
     actual_discount = fields.Float(string='Actual Discount', copy=False)  # a discount is used at the Register Payment Discount screen
+    paid_date = fields.Date(string='Paid Date')
 
     @api.multi
     @api.depends('payment_term_id', 'payment_term_id.early_payment_days', 'date_invoice')
@@ -55,3 +56,10 @@ class AccountInvoice(models.Model):
     def onchange_do_not_update_discount(self):
         if self.do_not_update_discount:
             self.available_discount_hidden = self.available_discount
+
+    @api.multi
+    def write(self, vals):
+        """Inherit to set the paid date"""
+        if vals.get('state') == 'paid':
+            vals['paid_date'] = fields.Date.context_today(self)
+        return super(AccountInvoice, self).write(vals)

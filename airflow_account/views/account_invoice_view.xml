@@ -32,6 +32,9 @@
             <xpath expr="//form//group[hasclass('oe_subtotal_footer')]//field[@name='residual']" position="after">
                 <field name="actual_discount" readonly="1" attrs="{'invisible': [('state', '!=', 'paid')]}"/>
             </xpath>
+            <field name="date_due" position="after">
+                <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
+            </field>
         </field>
     </record>
 

@@ -25,11 +25,9 @@ class AccountInvoice(models.Model):
     @api.multi
     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
     def _compute_sale_id(self):
-        for account in self:
-            if account.invoice_line_ids:
-                if account.invoice_line_ids[0].sale_line_ids:
-                    cur_order = account.invoice_line_ids[0].sale_line_ids[0].order_id
-                    account.sale_id = cur_order
+        for account in self.filtered(lambda inv: inv.invoice_line_ids and inv.invoice_line_ids[0].sale_line_ids):
+            sale_ids = account.mapped('invoice_line_ids.sale_line_ids.order_id')
+            account.sale_id = sale_ids[0] if sale_ids else False
 
     @api.multi
     @api.depends('payment_term_id', 'payment_term_id.early_payment_days', 'date_invoice')

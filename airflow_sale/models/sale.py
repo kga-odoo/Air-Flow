@@ -4,6 +4,12 @@
 from odoo import api, models, fields
 
 
+class SaleOrder(models.Model):
+    _inherit = "sale.order"
+
+    job_code = fields.Char(string="Job Code")
+
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 

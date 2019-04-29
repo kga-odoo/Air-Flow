@@ -106,7 +106,7 @@
             </td>
         </xpath>
         <!-- Overhaul the move lines tables -->
-        <xpath expr="//tr[@t-foreach='lines']/ancestor::table" position="replace">
+        <xpath expr="//tr[@t-as='move']/ancestor::table" position="replace">
             <table class="table table-condensed mt48" t-if="o.state!='done'">
                 <thead>
                     <tr>

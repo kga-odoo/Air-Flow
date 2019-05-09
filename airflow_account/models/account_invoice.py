@@ -3,12 +3,16 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, models, fields
+from odoo.addons import decimal_precision as dp
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
-    early_discount = fields.Integer(related='payment_term_id.early_discount', readonly=True)
+    # early_discount = fields.Integer(related='payment_term_id.early_discount', readonly=True)
+    early_discount_per = fields.Float(related='payment_term_id.early_discount_per', digits=dp.get_precision('Discount'))
     ed_payment_due_date = fields.Date(compute='_compute_early_discount_payment_due_date', string='Early Discount Payment Due Date', store=True)
     early_discount_amount = fields.Float(compute='_compute_early_discount_amount', string='Early Payment Amount', store=True)
     available_discount_hidden = fields.Float(string='Available Discount Force', copy=False)
@@ -39,7 +43,7 @@ class AccountInvoice(models.Model):
             invoice.ed_payment_due_date = fields.Date.to_string(due_date)
 
     @api.multi
-    @api.depends('payment_term_id', 'payment_term_id.early_discount', 'residual', 'available_discount_hidden', 'do_not_update_discount')
+    @api.depends('payment_term_id', 'payment_term_id.early_discount_per', 'residual', 'available_discount_hidden', 'do_not_update_discount')
     def _compute_early_discount_amount(self):
         for invoice in self:
             today = fields.Date.context_today(self)
@@ -47,7 +51,7 @@ class AccountInvoice(models.Model):
             if invoice.do_not_update_discount:
                 amount = amount - invoice.available_discount_hidden
             elif invoice.ed_payment_due_date and invoice.ed_payment_due_date >= today:
-                amount = amount * (1 - (invoice.early_discount/100))
+                amount = amount * (1 - (invoice.early_discount_per/100.0))
             invoice.early_discount_amount = amount
 
     @api.multi

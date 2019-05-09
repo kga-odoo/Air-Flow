@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <data>
                 <field name='cash_rounding_id' position="after">
-                    <field name="early_discount" invisible="1"/>
+                    <field name="early_discount_per" invisible="1"/>
                     <field name="ed_payment_due_date" invisible="1"/>
                     <field name="early_discount_amount" invisible="1"/>
                     <field name="available_discount" invisible="1"/>
@@ -34,7 +34,7 @@
         <field name="arch" type="xml">
             <xpath expr="//form//sheet//notebook" position="before">
                 <group string='Early Discount' attrs="{'invisible': [('state', '!=', 'open')]}">
-                    <field name="early_discount"/>
+                    <field name="early_discount_per"/>
                     <field name="ed_payment_due_date"/>
                     <field name="early_discount_amount"/>
                     <field name="do_not_update_discount"/>

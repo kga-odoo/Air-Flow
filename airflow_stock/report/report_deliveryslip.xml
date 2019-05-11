@@ -15,10 +15,6 @@
         <!-- Add row for Shipping Method and Sales Rep and Project Name -->
         <xpath expr="//div[@name='customer_address']" position="before">
             <div class="row mt16 mb16">
-                <div class="col-xs-4">
-                    <span>Shipping Method:</span>
-                    <span t-field="o.ship_method"/>
-                </div>
                 <div class="col-xs-4 pull-right">
                     <div>
                         <span>Sales Rep:</span>
@@ -88,13 +84,16 @@
         <xpath expr="//td[@name='td_sched_date']//span[@t-field='o.scheduled_date']" position="attributes">
             <attribute name="t-options">{"widget": "date"}</attribute>
         </xpath>
-        <!-- Add Cust Job # and Cust PO # to table -->
+        <!-- Add Cust Job #, Cust PO # and Shipping method (the custom field) to table -->
         <xpath expr="//th[@name='td_sched_date_h']" position="after">
             <th t-if="o.job_code">
                 <strong>Cust Job #</strong>
             </th>
             <th t-if="o.cust_po">
                 <strong>Cust PO #</strong>
+            </th>
+            <th t-if="o.ship_method">
+                <strong>Shipping Method</strong>
             </th>
         </xpath>
         <xpath expr="//td[@name='td_sched_date']" position="after">
@@ -103,6 +102,9 @@
             </td>
             <td t-if="o.cust_po">
                 <span t-esc="o.cust_po"/>
+            </td>
+            <td t-if="o.ship_method">
+                <span t-field="o.ship_method"/>
             </td>
         </xpath>
         <!-- Overhaul the move lines tables -->
@@ -160,6 +162,96 @@
                 </tbody>
             </table>
         </xpath>
+        <!-- Overhaul move lines table when state == done -->
+        <xpath expr="//tr[@t-foreach='o.move_line_ids']/ancestor::table" position="replace">
+            <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'">
+                <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
+                <t t-set="has_model" t-value="any([move_line.product_id.model for move_line in o.move_line_ids])"/>
+                <t t-set="has_manufacturer" t-value="any([move_line.product_id.seller_ids.name for move_line in o.move_line_ids])"/>
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>Qty</strong>
+                        </th>
+                        <th t-if="has_model">
+                            <strong>Model</strong>
+                        </th>
+                        <th>
+                            <strong>Item #</strong>
+                        </th>
+                        <th name="lot_serial" t-if="has_serial_number">
+                            Lot/Serial Number
+                        </th>
+                        <th>
+                            <strong>Product Description</strong>
+                        </th>
+                        <th t-if="has_manufacturer">
+                            <strong>Manufacturer</strong>
+                        </th>
+                        <th>
+                            <strong>Tag</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="o.move_line_ids" t-as="move_line">
+                        <!-- Quantity -->
+                        <td class="text-center">
+                            <span t-field="move_line.qty_done"/>
+                            <span t-field="move_line.product_uom_id"/>
+                        </td>
+                        <!-- Model -->
+                        <td t-if="has_model">
+                            <span t-field="move_line.product_id.model"/>
+                        </td>
+                        <!-- Item # -->
+                        <td>
+                            <span t-field="move_line.product_id"/>
+                            <p t-if="o.picking_type_code == 'outgoing'">
+                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                            </p>
+                            <p t-if="o.picking_type_code == 'incoming'">
+                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                            </p>
+                        </td>
+                        <!-- Lot/Serial Number -->
+                        <td t-if="has_serial_number">
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                        <span t-field="move_line.lot_id"/>
+                                        <t t-if="not move_line.lot_id">
+                                            <span t-field="move_line.lot_name"/>
+                                        </t>
+                                    </td>
+                                    <td name="lot_qty">
+                                        <t t-if="move_line.product_qty"> 
+                                            <span t-field="move_line.product_qty"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <!-- Product Description -->
+                        <td>
+                            <span t-field="move_line.product_id.sudo().description_sale"/>
+                        </td>
+                        <!-- Manufacturer -->
+                        <td t-if="has_manufacturer">
+                            <span t-field="move_line.product_id.seller_ids.name"/>
+                        </td>
+                        <!-- Tag -->
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+    </template>
+
+    <template id="report_delivery_document2_delivery_inherit_airflow" inherit_id="delivery.report_delivery_document2">
+        <!-- Remove default Carrier column -->
+        <xpath expr="//th[contains(@t-if, 'o.carrier_id')]" position="replace"></xpath>
+        <xpath expr="//td[contains(@t-if, 'o.carrier_id')]" position="replace"></xpath>
     </template>
 
     <!-- Remove Customer Reference section in header (as it's displayed in the table above) -->

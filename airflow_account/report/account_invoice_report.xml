@@ -7,7 +7,7 @@
                 <div class="pull-right">
                     <h3 class="mt0 text-right" t-field="company.report_header"/>
                 </div>
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-left"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-right"/>
                 <div class="pull-left company_address">
                     <div>
                         <strong t-field="company.partner_id.name"/>
@@ -44,10 +44,8 @@
         <template id="external_layout_boxed_airflow">
             <div class="header o_boxed_header">
                 <div class="row mb8">
-                    <div class="col-xs-6">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/>
-                    </div>
-                    <div class="col-xs-6 text-right mb4">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-right"/>
+                    <div class="col-xs-6 text-left mb4">
                         <h4 class="mt0" t-field="company.report_header"/>
                         <div name="company_address" class="mb4">
                             <span class="company_address" t-field="company.partner_id"
@@ -80,10 +78,8 @@
         <template id="external_layout_clean_airflow">
             <div class="header o_clean_header">
                 <div class="row">
-                    <div class="col-xs-6">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"/>
-                    </div>
-                    <div class="col-xs-5 col-xs-offset-1" name="company_address">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-right"/>
+                    <div class="col-xs-5 col-xs-offset-1 pull-left" name="company_address">
                             <strong><t t-if="company.name"><span t-field="company.name"/></t></strong>
                             <span class="company_address" t-field="company.partner_id"
                                 t-field-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
@@ -123,18 +119,8 @@
         <template id="external_layout_standard_airflow">
             <div class="header">
                 <div class="row">
-                    <div class="col-xs-3 mb4">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="max-height: 45px;"/>
-                    </div>
-                    <div class="col-xs-9 text-right" style="margin-top:22px;" t-field="company.report_header" name="moto"/>
-                </div>
-                <div t-if="company.logo or company.report_header" class="row zero_min_height">
-                    <div class="col-xs-12">
-                        <div style="border-bottom: 1px solid black;"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6" name="company_address">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" class="pull-right"/>
+                    <div class="col-xs-6 pull-left" name="company_address">
                         <span t-field="company.partner_id"
                             t-field-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}'/>
                         <t t-if="company.phone"><span t-field="company.phone"/></t>
@@ -263,8 +249,7 @@
                     <th>Description</th>
                     <th class="hidden">Source Document</th>
                     <th class="text-right">Quantity</th>
-                    <th t-if="display_discount" class="text-right">Disc.(%)</th>
-                    <th class="text-right">Amount</th>
+                    <th/>
                 </tr>
             </xpath>
             <xpath expr="//table/tbody/tr[@t-foreach='o.invoice_line_ids']" position="replace">
@@ -275,13 +260,7 @@
                         <span t-field="l.quantity"/>
                         <span t-field="l.uom_id"  groups="product.group_uom"/>
                     </td>
-                    <td t-if="display_discount" class="text-right">
-                        <span t-field="l.discount"/>
-                    </td>
-                    <td class="text-right" id="subtotal">
-                        <span t-field="l.price_subtotal"
-                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                    </td>
+                    <td/>
                 </tr>
             </xpath>
             <!-- Remove trailing column boxes when invoice lines < 5 -->

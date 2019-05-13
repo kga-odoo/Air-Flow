@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!-- Remove TIN and replace email with a different one for delivery slips -->
+    <!-- TODO: Company checks? -->
+    <template id="external_layout_background_inherit_airflow" inherit_id="web.external_layout_background">
+        <xpath expr="//div[hasclass('footer')]//li[@t-if='company.vat']" position="replace"></xpath>
+        <xpath expr="//div[hasclass('footer')]//span[@t-field='company.email']" position="replace">
+            <t t-if="is_deliveryslip"><span>warehouse@airflowreps.com</span></t>
+            <t t-else="">$0</t>
+        </xpath>
+    </template>
+    <template id="external_layout_boxed_inherit_airflow" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[hasclass('footer')]//li[@t-if='company.vat']" position="replace"></xpath>
+        <xpath expr="//div[hasclass('footer')]//span[@t-field='company.email']" position="replace">
+            <t t-if="is_deliveryslip"><span>warehouse@airflowreps.com</span></t>
+            <t t-else="">$0</t>
+        </xpath>
+    </template>
+    <template id="external_layout_standard_inherit_airflow" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[hasclass('footer')]//li[@t-if='company.vat']" position="replace"></xpath>
+        <xpath expr="//div[hasclass('footer')]//span[@t-field='company.email']" position="replace">
+            <t t-if="is_deliveryslip"><span>warehouse@airflowreps.com</span></t>
+            <t t-else="">$0</t>
+        </xpath>
+    </template>
+
+</odoo>

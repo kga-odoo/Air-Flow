@@ -115,13 +115,16 @@
         </xpath>
         <!-- Overhaul the move lines tables -->
         <xpath expr="//tr[@t-as='move']/ancestor::table" position="replace">
+            <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+            <t t-set="has_model" t-value="any([move.product_model for move in lines])"/>
+            <t t-set="has_manufacturer" t-value="any([move.manufacturer for move in lines])"/>
             <table class="table table-condensed mt48" t-if="o.state!='done'">
                 <thead>
                     <tr>
                         <th>
                             <strong>Qty</strong>
                         </th>
-                        <th>
+                        <th t-if="has_model">
                             <strong>Model</strong>
                         </th>
                         <th>
@@ -130,7 +133,7 @@
                         <th>
                             <strong>Product Description</strong>
                         </th>
-                        <th>
+                        <th t-if="has_manufacturer">
                             <strong>Manufacturer</strong>
                         </th>
                         <th>
@@ -139,13 +142,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
                     <tr t-foreach="lines" t-as="move">
                         <td>
                             <span t-field="move.product_uom_qty"/>
                             <span t-field="move.product_uom"/>
                         </td>
-                        <td>
+                        <td t-if="has_model">
                             <span t-field="move.product_model"/>
                         </td>
                         <td>
@@ -160,7 +162,7 @@
                         <td>
                             <span t-field="move.product_description"/>
                         </td>
-                        <td>
+                        <td t-if="has_manufacturer">
                             <span t-field="move.manufacturer"/>
                         </td>
                         <td></td>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+    <template id="report_deliveryslip_inherit_airflow" inherit_id="stock.report_deliveryslip">
+        <!-- Set flag to use in report footer -->
+        <xpath expr="//t[@t-foreach='docs']" position="before">
+            <t t-set="is_deliveryslip" t-value="True"/>
+        </xpath>
+    </template>
 
     <template id="report_delivery_document_inherit_airflow" inherit_id="stock.report_delivery_document">
         <!-- Report-specific styles -->

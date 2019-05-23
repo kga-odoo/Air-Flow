@@ -116,6 +116,7 @@
         <!-- Overhaul the move lines tables -->
         <xpath expr="//tr[@t-as='move']/ancestor::table" position="replace">
             <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+            <t t-set="has_tag" t-value="any([move.tag for move in lines])"/>
             <t t-set="has_model" t-value="any([move.product_model for move in lines])"/>
             <t t-set="has_manufacturer" t-value="any([move.manufacturer for move in lines])"/>
             <table class="table table-condensed mt48" t-if="o.state!='done'">
@@ -136,7 +137,7 @@
                         <th t-if="has_manufacturer">
                             <strong>Manufacturer</strong>
                         </th>
-                        <th>
+                        <th t-if="has_tag">
                             <strong>Tag</strong>
                         </th>
                     </tr>
@@ -165,7 +166,9 @@
                         <td t-if="has_manufacturer">
                             <span t-field="move.manufacturer"/>
                         </td>
-                        <td></td>
+                        <td t-if="has_tag">
+                            <span t-field="move.tag"/>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -173,8 +176,9 @@
         <!-- Overhaul move lines table when state == done -->
         <xpath expr="//tr[@t-foreach='o.move_line_ids']/ancestor::table" position="replace">
             <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'">
-                <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
+                <t t-set="has_tag" t-value="any([move_line.move_id.tag for move_line in o.move_line_ids])"/>
                 <t t-set="has_model" t-value="any([move_line.product_id.model for move_line in o.move_line_ids])"/>
+                <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')" groups="stock.group_production_lot"/>
                 <t t-set="has_manufacturer" t-value="any([move_line.product_id.seller_ids.name for move_line in o.move_line_ids])"/>
                 <thead>
                     <tr>
@@ -196,7 +200,7 @@
                         <th t-if="has_manufacturer">
                             <strong>Manufacturer</strong>
                         </th>
-                        <th>
+                        <th t-if="has_tag">
                             <strong>Tag</strong>
                         </th>
                     </tr>
@@ -249,7 +253,9 @@
                             <span t-field="move_line.product_id.seller_ids.name"/>
                         </td>
                         <!-- Tag -->
-                        <td></td>
+                        <td t-if="has_tag">
+                            <span t-field="move_line.move_id.tag"/>
+                        </td>
                     </tr>
                 </tbody>
             </table>

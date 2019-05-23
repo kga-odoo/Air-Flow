@@ -16,6 +16,10 @@
                     vertical-align: middle;
                     padding-bottom: 4px;
                 }
+                .line_below {
+                    width: 100%;
+                    border-bottom: 1px solid;
+                }
             </style>
         </xpath>
         <!-- Add row for Shipping Method and Sales Rep and Project Name -->
@@ -259,6 +263,23 @@
                     </tr>
                 </tbody>
             </table>
+        </xpath>
+        <!-- Add Sign, Date and Print spaces -->
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <div class="row mt32" name="signature">
+                <div class="col-xs-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Sign</span>
+                </div>
+                <div class="col-xs-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Print</span>
+                </div>
+                <div class="col-xs-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Date</span>
+                </div>
+            </div>
         </xpath>
     </template>
 

@@ -15,3 +15,4 @@ class StockMove(models.Model):
     manufacturer = fields.Many2one(
         string="Manufacturer", related="product_id.seller_ids.name"
     )
+    tag = fields.Char(string="Tag", related="sale_line_id.tag")

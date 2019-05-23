@@ -37,28 +37,35 @@ Task ID: 1969736
 
     9. Remove time from datetime
 
-    10. Add Cust Job # field to transfers = sale_id.x_studio_field_osLUc, Add to PDF (moved this field to job_code on sale.order object)
+    10. Add Cust Job # field to transfers = sale_id.x_studio_field_osLUc, Add to PDF (moved this field to "job_code" in sale.order)
 
     11. Add Cust PO # field to transfers = sale_id.client_order_ref, Add to PDF
 
-    12. Add "Shipping Method" field to transfers = sale_id.ship_method, Add to PDF
+    12. Add "Shipping Method" field to transfers = sale_id.ship_method, Add to PDF (and hide the default Carrier field)
 
     13. Rework the Stock Moves with the following fields, add non-existing fields to transfer lines.
         A. relabel "Quantity" to "Qty" on PDF
-        B. Model (product_id.x_studio_field_OY1Lv) - add to transfer line + PDF (moved this field to model on product.template object)
+        B. Model (product_id.x_studio_field_OY1Lv) - add to transfer line + PDF (moved this field to "model" in product.template)
         C. relabel "Product" to Item # on PDF
         D. Product Description (product_id.description_sale) - add to transfer line + PDF
         E. Manufacture (product_id.seller_ids.name) - add to transfer line + PDF
-        F. Tag (?? I need further clarification from customer??)
+        F. Tag - x_Tag from sale.order.line (moved this field and the referred field to "tag" in sale.order.line and stock.move)
+
+    14. Footer changes in delivery slip:
+        A. Replace email to warehouse@airflowreps.com
+        B. Remove TIN
+
+    15. Add 3 lines for "Sign", "Date", "Print"
 
     """,
     "category": "Custom Development",
-    "depends": ["airflow_sale", "sale_stock", "delivery"],
+    "depends": ["airflow_sale", "sale_stock", "delivery", "web"],
     "data": [
         # Views
         "views/stock_picking_views.xml",
         # Reports
         "report/report_deliveryslip.xml",
+        "report/report_templates.xml",
     ],
     "demo": [],
     "qweb": [],

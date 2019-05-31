@@ -12,7 +12,7 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     # early_discount = fields.Integer(related='payment_term_id.early_discount', readonly=True)
-    early_discount_per = fields.Float(related='payment_term_id.early_discount_per', digits=dp.get_precision('Discount'))
+    early_discount_per = fields.Float(related='payment_term_id.early_discount_per', digits=dp.get_precision('Discount'), readonly=True)
     ed_payment_due_date = fields.Date(compute='_compute_early_discount_payment_due_date', string='Early Discount Payment Due Date', store=True)
     early_discount_amount = fields.Float(compute='_compute_early_discount_amount', string='Early Payment Amount', store=True)
     available_discount_hidden = fields.Float(string='Available Discount Force', copy=False)

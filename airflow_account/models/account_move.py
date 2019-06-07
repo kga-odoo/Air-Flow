@@ -16,8 +16,9 @@ class AccountMove(models.Model):
 
         invoice = self._context.get('invoice', False)
 
-        if invoice:
-
+        if invoice and invoice.move_name and invoice.move_name != '/':
+            new_name = invoice.move_name
+        else:
             # invoice has types:
             # 'out_invoice' -> regular customer invoice
             # 'out_refund' -> customer credit notes

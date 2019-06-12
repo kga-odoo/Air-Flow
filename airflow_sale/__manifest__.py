@@ -22,6 +22,7 @@ Air Flow Stock: Transfer and Delivery Slip Modifications
 ========================================================
 Task ID: 1969736 (Most of the dev is in airflow_stock)
 * Creating a new field job_code for the above task (item 2.10), for migration from studio field x_studio_field_osLUc.
+* Creating a new field tag for the above task (item 13.F), for migration from custom field x_Tag on sale.order.line.
 
     """,
     'category': 'Custom Development',
@@ -32,6 +33,8 @@ Task ID: 1969736 (Most of the dev is in airflow_stock)
         'views/sale_view.xml',
         'views/purchase_view.xml',
         'views/vendor_bill_view.xml',
+        # server actions
+        'data/sale_actions.xml',
     ],
     'demo': [],
     'qweb': [],

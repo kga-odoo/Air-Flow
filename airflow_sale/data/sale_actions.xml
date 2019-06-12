@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record model="ir.actions.server" id="action_sale_parse_job_code">
+        <field name="name">Parse Job Code</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+        <field name="state">code</field>
+        <field name="code">
+# Parses job name from HTML field and sets it to job_code field.
+for rec in records:
+  html = rec.x_studio_field_osLUc
+  start = html.find('href=')
+  start = html.find('>', start)
+  stop = html.find('&lt;/a>')
+  try:
+    code = html[start + 1 : stop]
+    if code:
+      rec.write({'job_code': code})
+  except:
+    pass
+        </field>
+    </record>
+
+</odoo>

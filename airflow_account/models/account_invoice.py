@@ -17,18 +17,22 @@ class AccountInvoice(models.Model):
     actual_discount = fields.Float(string='Actual Discount', copy=False)  # a discount is used at the Register Payment Discount screen
 
     sale_id = fields.Many2one('sale.order',compute="_compute_sale_id", string="Original Sale Order",store=True)
-    # proj_manager = fields.Many2one('res.partner', related='sale_id.proj_manager', string="Project Manager", default=False, store=True)
-    proj_manager = fields.Char(related='sale_id.proj_manager', string="Project Manager", default=False, store=True)
-    proj_name = fields.Char(related='sale_id.proj_name', string="Project Name", default=False, store=True)
-    ship_date = fields.Date(related='sale_id.ship_date', string="Ship Date", default=False, store=True)
-    ship_method = fields.Many2one('delivery.carrier', related='sale_id.ship_method', string="Shipping Method", default=False, store=True)
+    proj_manager = fields.Char(related='sale_id.proj_manager', string="Project Manager", store=True)
+    proj_name = fields.Char(related='sale_id.proj_name', string="Project Name", store=True)
+    ship_date = fields.Date(related='sale_id.ship_date', string="Ship Date",store=True)
+    ship_method = fields.Many2one('delivery.carrier', related='sale_id.ship_method', string="Shipping Method", store=True)
 
     @api.multi
     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
     def _compute_sale_id(self):
-        for account in self.filtered(lambda inv: inv.invoice_line_ids and inv.invoice_line_ids[0].sale_line_ids):
-            sale_ids = account.mapped('invoice_line_ids.sale_line_ids.order_id')
-            account.sale_id = sale_ids[0] if sale_ids else False
+        for account in self.filtered(lambda inv: inv.type == 'out_refund' or inv.type == 'out_invoice'):
+            # Handle case of credit note
+            if account.type == 'out_refund':
+                account.sale_id = account.refund_invoice_id.sale_id.id if account.refund_invoice_id.sale_id.id else False
+            # Handle case of cust invoice
+            elif account.type == 'out_invoice':
+                sale_ids = account.mapped('invoice_line_ids.sale_line_ids.order_id')
+                account.sale_id = sale_ids[0] if sale_ids else False
 
     @api.multi
     @api.depends('payment_term_id', 'payment_term_id.early_payment_days', 'date_invoice')

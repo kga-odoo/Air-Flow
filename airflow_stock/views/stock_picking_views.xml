@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_picking_tree_inherit_airflow" model="ir.ui.view">
+        <field name="name">stock.picking.tree.inherit.airflow</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="item_count"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_picking_form_inherit_airflow" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.airflow</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//group//field[@name='backorder_id']" position="after">
+                <field name="proj_name"/>
+                <field name="job_code"/>
+                <field name="cust_po"/>
+                <field name="ship_method"/>
+            </xpath>
+            <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="after">
+                <field name="product_model"/>
+                <field name="product_description"/>
+                <field name="manufacturer"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

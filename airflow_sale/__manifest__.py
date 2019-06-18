@@ -18,6 +18,11 @@ Air Flow Sale: Vendor Bill link to SO
 ID #1957822
 This company has many dropships. Vendor Bill and Purchase Orders needs to display a direct link to Sales Order. Researching Source Number takes too much time.
 
+Air Flow Stock: Transfer and Delivery Slip Modifications
+========================================================
+Task ID: 1969736 (Most of the dev is in airflow_stock)
+* Creating a new field job_code for the above task (item 2.10), for migration from studio field x_studio_field_osLUc.
+* Creating a new field tag for the above task (item 13.F), for migration from custom field x_Tag on sale.order.line.
 
     """,
     'category': 'Custom Development',
@@ -28,6 +33,8 @@ This company has many dropships. Vendor Bill and Purchase Orders needs to displa
         'views/sale_view.xml',
         'views/purchase_view.xml',
         'views/vendor_bill_view.xml',
+        # server actions
+        'data/sale_actions.xml',
     ],
     'demo': [],
     'qweb': [],

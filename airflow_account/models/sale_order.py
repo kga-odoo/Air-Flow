@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
 
     # The field project_manager is depricated. Airflow wishes to have it hold Char type instead of many2one.
     # Keeping field for historical reasons and data preservation.
-    proj_manager = fields.Many2one('res.partner', string="ESTING THIS CHANGEPProject Manager(Depricated)", store=True)
+    proj_manager = fields.Many2one('res.partner', string="Project Manager(Depricated)", store=True)
 
     proj_manager_char = fields.Char(string="Project Manager", store=True)
     proj_name = fields.Char(string="Project Name", store=True)

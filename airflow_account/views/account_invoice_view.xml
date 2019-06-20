@@ -5,12 +5,25 @@
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
-            <field name='cash_rounding_id' position="after">
-                <field name="early_discount" invisible="1"/>
-                <field name="ed_payment_due_date" invisible="1"/>
-                <field name="early_discount_amount" invisible="1"/>
-                <field name="available_discount" invisible="1"/>
-            </field>
+            <data>
+                <field name='cash_rounding_id' position="after">
+                    <field name="early_discount_per" invisible="1"/>
+                    <field name="ed_payment_due_date" invisible="1"/>
+                    <field name="early_discount_amount" invisible="1"/>
+                    <field name="available_discount" invisible="1"/>
+                </field>
+                <xpath expr="//group[1]//group[1]" position="inside">
+                    <field name="proj_manager_char"/>
+                    <field name="proj_name"/>
+                </xpath>
+                <xpath expr="//group[1]//group[2]" position="inside">
+                    <field name="ship_date"/>
+                    <field name="ship_method"/>
+                </xpath>
+                <field name="date_due" position="after">
+                    <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
+                </field>
+            </data>
         </field>
     </record>
 
@@ -21,7 +34,7 @@
         <field name="arch" type="xml">
             <xpath expr="//form//sheet//notebook" position="before">
                 <group string='Early Discount' attrs="{'invisible': [('state', '!=', 'open')]}">
-                    <field name="early_discount"/>
+                    <field name="early_discount_per" readonly="1"/>
                     <field name="ed_payment_due_date"/>
                     <field name="early_discount_amount"/>
                     <field name="do_not_update_discount"/>
@@ -32,22 +45,9 @@
             <xpath expr="//form//group[hasclass('oe_subtotal_footer')]//field[@name='residual']" position="after">
                 <field name="actual_discount" readonly="1" attrs="{'invisible': [('state', '!=', 'paid')]}"/>
             </xpath>
-        </field>
-    </record>
-
-    <record id="view_account_invoice_form_inherit_air_flow" model="ir.ui.view">
-        <field name="name">account.invoice.form.air.flow</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//group[1]//group[1]" position="inside">
-                <field name="proj_manager_char"/>
-                <field name="proj_name"/>
-            </xpath>
-            <xpath expr="//group[1]//group[2]" position="inside">
-                <field name="ship_date"/>
-                <field name="ship_method"/>
-            </xpath>
+            <field name="date_due" position="after">
+                <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
+            </field>
         </field>
     </record>
 </odoo>

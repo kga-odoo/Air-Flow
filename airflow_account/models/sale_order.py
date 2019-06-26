@@ -12,8 +12,8 @@ class SaleOrder(models.Model):
     # Keeping field for historical reasons and data preservation.
     proj_manager = fields.Many2one('res.partner', string="Project Manager(Depricated)", store=True)
 
-    proj_manager_char = fields.Char(string="Project Manager", store=True)
-    proj_name = fields.Char(string="Project Name", store=True)
+    proj_manager_name = fields.Char(string="Project Manager")
+    proj_name = fields.Char(string="Project Name")
 
     ship_date = fields.Date(string="Ship Date", store=True)
     ship_method = fields.Many2one('delivery.carrier', string="Shipping Method", store=True)

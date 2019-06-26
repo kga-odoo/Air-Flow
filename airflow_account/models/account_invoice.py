@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from dateutil.relativedelta import relativedelta
-
 from odoo import api, models, fields
 from odoo.addons import decimal_precision as dp
 import logging
+
 
 _logger = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class AccountInvoice(models.Model):
     # Keeping field for historical reasons and data preservation.
     proj_manager = fields.Many2one('res.partner', related='sale_id.proj_manager', string="Project Manager(Depricated)", store=True)
 
-    proj_manager_char = fields.Char(related='sale_id.proj_manager_char', string="Project Manager", store=True)
+    proj_manager_name = fields.Char(related='sale_id.proj_manager_name', string="Project Manager", store=True)
     proj_name = fields.Char(related='sale_id.proj_name', string="Project Name", store=True)
 
     ship_date = fields.Date(related='sale_id.ship_date', string="Ship Date",store=True)

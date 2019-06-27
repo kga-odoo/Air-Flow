@@ -6,6 +6,10 @@
         <field name="arch" type="xml">
             <!-- Remove "Document: " and "Date: " -->
             <xpath expr="//span[@t-esc='today']/parent::*" position="replace">
+                <!-- Re-compute partner_addr here, variable on the parent is not detected for some reason -gye -->
+                <t t-if="invoice_address_id" t-set="partner_addr" t-value="invoice_address_id"></t>
+                <t t-else="" t-set="partner_addr" t-value="partner"></t>
+                
                 <p style="margin-top: 35px;">
                     Customer account statement<br/>
                     <span t-esc="today" t-options="{'widget': 'date', 'format': 'M/d/Y'}"/><br/>

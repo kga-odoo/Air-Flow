@@ -76,12 +76,17 @@ Air Flow Account Invoice Report Modifications
 Task ID: 1950508
 Custom modifications to the invoice report.
 
+Air Flow Account Customer Statement Modifications
+=================================================
+Task ID: 2004684
+Custom modifications to the CUstomer Statement.
+
 
     """,
     'license': 'OEEL-1',
     'author': 'Odoo Inc',
     'version': '0.1',
-    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery', 'account'],
+    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery', 'account_reports'],
     'data': [
 
         # security
@@ -93,6 +98,7 @@ Custom modifications to the invoice report.
         'views/account_payment_term_view.xml',
         'views/account_invoice_view.xml',
         'views/sale_order_view.xml',
+        'views/report_followup.xml',
 
         # reports
         'report/print_check.xml',

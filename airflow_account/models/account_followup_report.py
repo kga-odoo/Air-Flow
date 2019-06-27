@@ -6,6 +6,12 @@ from odoo.exceptions import ValidationError
 class report_account_followup_report(models.AbstractModel):
     _inherit = "account.followup.report"
 
+    def get_pdf(self, options, minimal_layout=True):
+        # Pass flag in context so alternate header can be used for this report type
+        return super(
+            report_account_followup_report, self.with_context(customer_statement=True)
+        ).get_pdf(options, minimal_layout=minimal_layout)
+
     def get_columns_name(self, options):
         headers = super(report_account_followup_report, self).get_columns_name(options)
         if self.env.context.get("print_mode"):
@@ -53,7 +59,6 @@ class report_account_followup_report(models.AbstractModel):
         # Add trailing lines to group
         if aml_lines or total_lines:
             groups.append((aml_lines, total_lines))
-            print(aml_lines, total_lines)
 
         # Create new processed lines
         new_lines = []

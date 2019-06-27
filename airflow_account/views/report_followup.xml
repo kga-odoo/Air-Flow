@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="followup_filter_info_template_inherit_airflow" model="ir.ui.view">
+        <field name="name">followup.filter.info.template.inherit.air.flow</field>
+        <field name="inherit_id" ref="account_reports.followup_filter_info_template"/>
+        <field name="arch" type="xml">
+            <!-- Remove "Document: " and "Date: " -->
+            <xpath expr="//span[@t-esc='today']/parent::*" position="replace">
+                <p style="margin-top: 35px;">
+                    Customer account statement<br/>
+                    <span t-esc="today" t-options="{'widget': 'date', 'format': 'M/d/Y'}"/><br/>
+                    <t t-if='partner_addr.ref'>Customer ref: <span t-field="partner_addr.ref"/></t>
+                </p>
+            </xpath>
+            <!-- Move address to left -->
+            <xpath expr="//div[hasclass('col-xs-offset-7')]" position="attributes">
+                <attribute name="class">col-xs-5</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

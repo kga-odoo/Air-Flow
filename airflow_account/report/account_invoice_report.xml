@@ -154,7 +154,7 @@
         <!-- Extend the external layout to show specific invoice headers/footers -->
         <template id="inherit_external_layout_airflow" inherit_id="web.external_layout">
             <xpath expr="//t[@t-call='web.external_layout_background']" position="replace">
-                <t t-if="doc_model == 'account.invoice'">
+                <t t-if="doc_model == 'account.invoice' or env.context.get('customer_statement')">
                     <t t-call="airflow_account.external_layout_background_airflow"><t t-raw="0"/></t>
                 </t>
                 <t t-else="">
@@ -163,7 +163,7 @@
             </xpath>
 
             <xpath expr="//t[@t-call='web.external_layout_boxed']" position="replace">
-                <t t-if="doc_model == 'account.invoice'">
+                <t t-if="doc_model == 'account.invoice' or env.context.get('customer_statement')">
                     <t t-call="airflow_account.external_layout_boxed_airflow"><t t-raw="0"/></t>
                 </t>
                 <t t-else="">
@@ -172,7 +172,7 @@
             </xpath>
 
             <xpath expr="//t[@t-call='web.external_layout_clean']" position="replace">
-                <t t-if="doc_model == 'account.invoice'">
+                <t t-if="doc_model == 'account.invoice' or env.context.get('customer_statement')">
                     <t t-call="airflow_account.external_layout_clean_airflow"><t t-raw="0"/></t>
                 </t>
                 <t t-else="">
@@ -181,7 +181,7 @@
             </xpath>
 
             <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
-                <t t-if="doc_model == 'account.invoice'">
+                <t t-if="doc_model == 'account.invoice' or env.context.get('customer_statement')">
                     <t t-call="airflow_account.external_layout_standard_airflow"><t t-raw="0"/></t>
                 </t>
                 <t t-else="">

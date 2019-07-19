@@ -15,11 +15,18 @@ class report_account_followup_report(models.AbstractModel):
     def get_columns_name(self, options):
         headers = super(report_account_followup_report, self).get_columns_name(options)
         if self.env.context.get("print_mode"):
-            headers[0] = {"name": _(" New Invoice # "), "style": "white-space:nowrap;"}
+            headers[0] = {"name": _(" Invoice Number "), "style": "white-space:nowrap;"}
             headers.insert(
                 1,
                 {
-                    "name": _(" Old Reference # "),
+                    "name": _(" Reference "),
+                    "style": "text-align:center; white-space:nowrap;",
+                },
+            )
+            headers.insert(
+                1,
+                {
+                    "name": _(" Customer PO "),
                     "style": "text-align:center; white-space:nowrap;",
                 },
             )
@@ -27,9 +34,9 @@ class report_account_followup_report(models.AbstractModel):
 
     def get_lines(self, options, line_id=None):
         """
-        When in print_mode, sort aml lines by due date and ad "Old Reference #" column.
+        When in print_mode, sort aml lines by due date and add "Reference" and "Customer PO" columns.
         Notes:
-        - lines are ordered, and contain some aml lines followed by one/two total line(s) for each currency.
+        - lines are ordered, and contain some aml lines followed by one/two "total" line(s) for each currency.
         - Only reorder aml lines within each currency (i.e one group of aml and total lines).
         """
         lines = super(report_account_followup_report, self).get_lines(options, line_id)
@@ -77,14 +84,15 @@ class report_account_followup_report(models.AbstractModel):
 
             aml_lines = sorted(aml_lines, key=_due_date_key)
 
-            # Add "Old Reference" column
+            # Add "Reference" and "Customer PO" columns
             for line in aml_lines:
                 aml = amls[line["id"]]
-                src_col = {"name": aml.invoice_id and aml.invoice_id.origin}
-                line["columns"].insert(0, src_col)
+                line["columns"].insert(0, {"name": aml.invoice_id.origin})
+                line["columns"].insert(0, {"name": aml.invoice_id.name})
                 new_lines.append(line)
             # Add empty columns to total lines to line them up
             for line in total_lines:
+                line["columns"].insert(0, {"name": False})
                 line["columns"].insert(0, {"name": False})
                 new_lines.append(line)
 

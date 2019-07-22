@@ -16,43 +16,40 @@ class report_account_followup_report(models.AbstractModel):
         headers = super(report_account_followup_report, self).get_columns_name(options)
         if self.env.context.get("print_mode"):
             headers[0] = {"name": _(" Invoice Number "), "style": "white-space:nowrap;"}
-            headers.insert(
-                1,
+            headers[1:1] = [
+                headers.pop(3),  # Communications header
                 {
                     "name": _(" Reference "),
                     "style": "text-align:center; white-space:nowrap;",
                 },
-            )
-            headers.insert(
-                1,
-                {
-                    "name": _(" Customer PO "),
-                    "style": "text-align:center; white-space:nowrap;",
-                },
-            )
+            ]
         return headers
 
     def get_lines(self, options, line_id=None):
         """
-        When in print_mode, sort aml lines by due date and add "Reference" and "Customer PO" columns.
+        When in print_mode, sort aml lines by due date and add "Reference" and
+        "Customer PO" columns.
         Notes:
-        - lines are ordered, and contain some aml lines followed by one/two "total" line(s) for each currency.
-        - Only reorder aml lines within each currency (i.e one group of aml and total lines).
+        - lines are ordered, and contain some aml lines followed by one/two "total"
+          line(s) for each currency.
+        - Only reorder aml lines within each currency (i.e one group of aml and total
+          lines).
         """
         lines = super(report_account_followup_report, self).get_lines(options, line_id)
         if not self.env.context.get("print_mode"):
             return lines
 
-        # Loop through lines and separate lines by currency (collect aml lines and total lines separately per group)
+        # Separate lines by currency (collect aml and total lines separately per group)
         groups = []
         aml_lines = []
         total_lines = []
         _is_line_aml = True
         _is_prev_line_aml = True
         for line in lines:
-            # Differentiate between aml line and total line based on keys
+            # Differentiate between aml and total line based on keys
             _is_line_aml = set(["type", "move_id", "has_invoice"]) <= line.keys()
-            # Clear current group if it's a new group (prev line is a total, this line is an aml)
+            # Clear current group if a new group starts. It's a new group if prev line
+            # is a total and this line is an aml
             if _is_line_aml and not _is_prev_line_aml:
                 if aml_lines or total_lines:
                     groups.append((aml_lines, total_lines))
@@ -77,22 +74,24 @@ class report_account_followup_report(models.AbstractModel):
             amls = {aml.id: aml for aml in amls}
 
             # Sort lines by due date
-            # Note: Second column is due date string, but the date format might mess up sorting, so we get the originl data from the aml
+            # Note: Second column is due date string, but the date format might mess up
+            #       sorting, so we get the originl data from the aml
             def _due_date_key(line):
                 aml = amls[line["id"]]
                 return aml.date_maturity or aml.date
 
             aml_lines = sorted(aml_lines, key=_due_date_key)
 
-            # Add "Reference" and "Customer PO" columns
+            # Add "Reference" column and move Communication to beginning
             for line in aml_lines:
                 aml = amls[line["id"]]
-                line["columns"].insert(0, {"name": aml.invoice_id.origin})
-                line["columns"].insert(0, {"name": aml.invoice_id.name})
+                line["columns"][0:0] = [
+                    line["columns"].pop(2),  # Communications column
+                    {"name": aml.invoice_id.origin},
+                ]
                 new_lines.append(line)
             # Add empty columns to total lines to line them up
             for line in total_lines:
-                line["columns"].insert(0, {"name": False})
                 line["columns"].insert(0, {"name": False})
                 new_lines.append(line)
 

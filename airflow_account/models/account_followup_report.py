@@ -16,10 +16,14 @@ class report_account_followup_report(models.AbstractModel):
         headers = super(report_account_followup_report, self).get_columns_name(options)
         if self.env.context.get("print_mode"):
             headers[0] = {"name": _(" Invoice Number "), "style": "white-space:nowrap;"}
+            del headers[3]  # Remove "Communications" header
             headers[1:1] = [
-                headers.pop(3),  # Communications header
                 {
-                    "name": _(" Reference "),
+                    "name": f" {_('Customer')} PO ",
+                    "style": "text-align:center; white-space:nowrap;",
+                },
+                {
+                    "name": f" {_('Reference')} ",
                     "style": "text-align:center; white-space:nowrap;",
                 },
             ]
@@ -27,8 +31,7 @@ class report_account_followup_report(models.AbstractModel):
 
     def get_lines(self, options, line_id=None):
         """
-        When in print_mode, sort aml lines by due date and add "Reference" and
-        "Customer PO" columns.
+        When in print_mode, sort aml lines by due date and add "Reference" column.
         Notes:
         - lines are ordered, and contain some aml lines followed by one/two "total"
           line(s) for each currency.
@@ -86,7 +89,7 @@ class report_account_followup_report(models.AbstractModel):
             for line in aml_lines:
                 aml = amls[line["id"]]
                 line["columns"][0:0] = [
-                    line["columns"].pop(2),  # Communications column
+                    {"name": line["columns"].pop(2).get("name")},  # Communications
                     {"name": aml.invoice_id.origin},
                 ]
                 new_lines.append(line)

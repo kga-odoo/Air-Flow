@@ -58,10 +58,10 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
                 'invoice_id': i.id,
                 'residual': i.residual,
                 'available_discount': i.available_discount,
-                'total_paid': i.early_discount_amount,
+                'total_paid': i.residual - i.available_discount,
                 'status': 'paid',
                 'reference': i.reference,
-                'total_to_pay': i.early_discount_amount}) for i in invoices]
+                'total_to_pay': i.residual - i.available_discount}) for i in invoices]
         return rec
 
     @api.multi

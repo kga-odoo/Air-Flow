@@ -23,6 +23,8 @@ class StockPicking(models.Model):
     job_code = fields.Char(string="Job Code", related="sale_id.job_code")
     cust_po = fields.Char(string="Customer PO", related="sale_id.client_order_ref")
 
+    ship_attn = fields.Char(string='Ship Attn To', related='sale_id.ship_attn')
+    
     @api.multi
     @api.depends("move_lines.product_uom_qty")
     def _compute_item_count(self):

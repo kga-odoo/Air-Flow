@@ -9,4 +9,5 @@ from odoo.addons import decimal_precision as dp
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    # x_Attention 
     ship_attn = fields.Char(string='Attention', copy=True)

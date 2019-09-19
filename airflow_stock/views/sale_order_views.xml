@@ -6,9 +6,9 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <field name="carrier_id" position="before">
+            <xpath expr="//field[@name='ship_date']" position="before">
                 <field name="ship_attn"/>
-            </field>
+            </xpath>
         </field>
     </record>
 

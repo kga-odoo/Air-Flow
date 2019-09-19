@@ -22,7 +22,8 @@ class StockPicking(models.Model):
     proj_name = fields.Char(string="Project Name", related="sale_id.proj_name")
     job_code = fields.Char(string="Job Code", related="sale_id.job_code")
     cust_po = fields.Char(string="Customer PO", related="sale_id.client_order_ref")
-
+    
+    # x_studio_field_bekml
     ship_attn = fields.Char(string='Ship Attn To', related='sale_id.ship_attn')
     
     @api.multi

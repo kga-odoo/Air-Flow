@@ -15,7 +15,7 @@ class StockMove(models.Model):
     manufacturer = fields.Many2one(
         string="Manufacturer", related="product_id.seller_ids.name"
     )
-    tag = fields.Char(string="Tag", related="sale_line_id.tag")
+    tag = fields.Char(string="SO Tag", related="sale_line_id.tag")
     
     # x_studio_field_biDgl
     po_tag = fields.Char(string="PO Tag", related="purchase_line_id.tag")

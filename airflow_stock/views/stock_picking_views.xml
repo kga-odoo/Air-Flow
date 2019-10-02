@@ -28,7 +28,8 @@
                 <field name="product_model"/>
                 <field name="product_description"/>
                 <field name="manufacturer"/>
-		<field name="po_tag"/>
+		<field name="tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'outgoing')]}"/>
+		<field name="po_tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')]}"/>
             </xpath>
         </field>
     </record>

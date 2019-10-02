@@ -230,10 +230,10 @@
                         <!--     <strong>Manufacturer</strong> -->
                         <!-- </th> -->
                         <th t-if="has_tag">
-                            <strong>Tag</strong>
+                            <strong>SO Tag</strong>
                         </th>
 			<th t-if="has_po_tag">
-                            <strong>Tag</strong>
+                            <strong>PO Tag</strong>
                         </th>
                     </tr>
                 </thead>

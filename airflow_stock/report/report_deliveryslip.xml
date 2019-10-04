@@ -161,11 +161,11 @@
                         <!--     <strong>Manufacturer</strong> -->
                         <!-- </th> -->
                         <th t-if="has_tag">
-                            <strong>SO Tag</strong>
+                            <strong>Tag</strong>
                         </th>
-			<th t-if="has_po_tag">
-                            <strong>PO Tag</strong>
-                        </th>
+			<!-- <th t-if="has_po_tag"> -->
+                        <!--     <strong>PO Tag</strong> -->
+                        <!-- </th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -195,9 +195,9 @@
                         <td t-if="has_tag">
                             <span t-field="move.tag"/>
                         </td>
-			<td t-if="has_po_tag">
-                            <span t-field="move.po_tag"/>
-                        </td>
+			<!-- <td t-if="has_po_tag"> -->
+                        <!--     <span t-field="move.po_tag"/> -->
+                        <!-- </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -230,11 +230,11 @@
                         <!--     <strong>Manufacturer</strong> -->
                         <!-- </th> -->
                         <th t-if="has_tag">
-                            <strong>SO Tag</strong>
+                            <strong>Tag</strong>
                         </th>
-			<th t-if="has_po_tag">
-                            <strong>PO Tag</strong>
-                        </th>
+			<!-- <th t-if="has_po_tag"> -->
+                        <!--     <strong>PO Tag</strong> -->
+                        <!-- </th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -288,9 +288,9 @@
                         <td t-if="has_tag">
                             <span t-field="move_line.move_id.tag"/>
                         </td>
-			<td t-if="has_po_tag">
-                            <span t-field="move_line.move_id.po_tag"/>
-                        </td>
+			<!-- <td t-if="has_po_tag"> -->
+                        <!--     <span t-field="move_line.move_id.po_tag"/> -->
+                        <!-- </td> -->
                     </tr>
                 </tbody>
             </table>

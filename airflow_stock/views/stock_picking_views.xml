@@ -31,7 +31,7 @@
 		<!-- <field name="tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'outgoing')]}"/> -->
 		<!-- <field name="po_tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')]}"/> -->
 		<field name="tag"/>
-		<field name="po_tag"/>
+		<!-- <field name="po_tag"/> -->
             </xpath>
         </field>
     </record>

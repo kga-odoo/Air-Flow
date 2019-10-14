@@ -57,11 +57,27 @@ Task ID: 1969736
 
     15. Add 3 lines for "Sign", "Date", "Print"
 
+    16. [2071766] Create fields on printed Delivery Order form. Include the following fields:
+
+    16.1 Project Name: to pull from field Project Name (proj_name) on stock.picking record
+
+    16.2 attn: to pull from Ship Attn To (x_studio_field_bekml) on stock.picking record
+
+    16.3 Customer PO: to pull from Customer PO (cust_po) on stock.picking record
+     
+    17. [2071766] Display Tag information on product list view:
+
+    17.1 Tag information to pull from Studio field x_studio_field_biDgl on stock.pikcing move_line.  
+
+    17.2 Remove Manufacturer column from Delivery slip column
+
     """,
     "category": "Custom Development",
     "depends": ["airflow_sale", "sale_stock", "delivery", "web"],
     "data": [
         # Views
+        "views/sale_order_views.xml",
+        "views/purchase_order_views.xml",
         "views/stock_picking_views.xml",
         # Reports
         "report/report_deliveryslip.xml",

@@ -22,11 +22,16 @@
                 <field name="job_code"/>
                 <field name="cust_po"/>
                 <field name="ship_method"/>
+		<field name="ship_attn"/>
             </xpath>
             <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="after">
                 <field name="product_model"/>
                 <field name="product_description"/>
                 <field name="manufacturer"/>
+		<!-- <field name="tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'outgoing')]}"/> -->
+		<!-- <field name="po_tag" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')]}"/> -->
+		<field name="tag"/>
+		<!-- <field name="po_tag"/> -->
             </xpath>
         </field>
     </record>

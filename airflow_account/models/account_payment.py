@@ -3,8 +3,9 @@
 
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
-from odoo.tools.misc import formatLang
-
+from odoo.tools.misc import formatLang, format_date
+LINE_FILLER = '*'
+INV_LINES_PER_STUB = 9
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
@@ -165,17 +166,50 @@ class AccountPayment(models.Model):
 
         return move
 
+    # this is also entirely overloaded.
+    # can we stop this kind of dev in the future? It is utterly terrible. Mark my word. -- EHE
     def make_stub_line(self, invoice):
-        res = super(AccountPayment, self).make_stub_line(invoice)
+        """ Return the dict used to display an invoice/refund in the stub
+        """
+        # Find the account.partial.reconcile which are common to the invoice and the payment
+        if invoice.type in ['in_invoice', 'out_refund']:
+            invoice_sign = 1
+            invoice_payment_reconcile = invoice.move_id.line_ids.mapped('matched_debit_ids').filtered(lambda r: r.debit_move_id in self.move_line_ids)
+        else:
+            invoice_sign = -1
+            invoice_payment_reconcile = invoice.move_id.line_ids.mapped('matched_credit_ids').filtered(lambda r: r.credit_move_id in self.move_line_ids)
+
+        if self.currency_id != self.journal_id.company_id.currency_id:
+            amount_paid = abs(sum(invoice_payment_reconcile.mapped('amount_currency')))
+        else:
+            amount_paid = abs(sum(invoice_payment_reconcile.mapped('amount')))
+
+        amount_residual = invoice_sign * invoice.residual
+        original_res =  {
+            'due_date': format_date(self.env, invoice.date_due),
+            'number': invoice.reference and invoice.number + ' - ' + invoice.reference or invoice.number,
+            'amount_total': formatLang(self.env, invoice_sign * invoice.amount_total, currency_obj=invoice.currency_id),
+            'amount_residual': formatLang(self.env, amount_residual, currency_obj=invoice.currency_id) if amount_residual*10**4 != 0 else '-',
+            'amount_paid': formatLang(self.env, invoice_sign * amount_paid, currency_obj=invoice.currency_id),
+            'currency': invoice.currency_id,
+        }
+
+        # previous custom code here
         allocations = self.payment_allocation_ids.filtered(lambda a: a.invoice_id.id == invoice.id)
-        invoice_sign = 1 if invoice.type in ['in_invoice', 'out_refund'] else -1
         total_paid = allocations and allocations[0].total_paid or 0
-        res.update(
+        original_res.update(
             number=invoice.reference or invoice.number,
             discount=formatLang(self.env, invoice_sign * invoice.actual_discount, currency_obj=invoice.currency_id),
             payment_amount=formatLang(self.env, invoice_sign * total_paid, currency_obj=invoice.currency_id),
             skip=invoice.actual_discount == 0 and total_paid == 0 or False
         )
+        res = [original_res]
+        for payment in invoice.payment_ids:
+            print(payment, payment.name, payment.amount)
+            payment_info = original_res.copy()
+            payment_info.update(payment_amount=formatLang(self.env, invoice_sign * payment.amount, currency_obj=invoice.currency_id))
+            res.append(payment_info)
+        
         return res
 
     def get_pages(self):
@@ -190,6 +224,55 @@ class AccountPayment(models.Model):
                         page['stub_lines'].remove(line)
         return pages
 
+    def make_stub_lines(self, invoices):
+        res = []
+        for invoice in invoices:
+            res.extend(self.make_stub_line(invoice))
+        return res
+
+    # need to overload this method here to force multiple stub_lines
+    def make_stub_pages(self):
+        """ The stub is the summary of paid invoices. It may spill on several pages, in which case only the check on
+            first page is valid. This function returns a list of stub lines per page.
+        """
+        if len(self.invoice_ids) == 0:
+            return None
+
+        multi_stub = self.company_id.us_check_multi_stub
+
+        invoices = self.invoice_ids.sorted(key=lambda r: r.date_due)
+        debits = invoices.filtered(lambda r: r.type == 'in_invoice')
+        credits = invoices.filtered(lambda r: r.type == 'in_refund')
+
+        # customization code starts
+        # Prepare the stub lines
+        if not credits:
+            stub_lines = self.make_stub_lines(invoices) # [self.make_stub_line(inv) for inv in invoices]
+        else:
+            stub_lines = [{'header': True, 'name': "Bills"}]
+            stub_lines += self.make_stub_lines(debits)
+            stub_lines += [{'header': True, 'name': "Refunds"}]
+            stub_lines += self.make_stub_lines(credits)
+        # customization code ends
+
+        # Crop the stub lines or split them on multiple pages
+        if not multi_stub:
+            # If we need to crop the stub, leave place for an ellipsis line
+            num_stub_lines = len(stub_lines) > INV_LINES_PER_STUB and INV_LINES_PER_STUB-1 or INV_LINES_PER_STUB
+            stub_pages = [stub_lines[:num_stub_lines]]
+        else:
+            stub_pages = []
+            i = 0
+            while i < len(stub_lines):
+                # Make sure we don't start the credit section at the end of a page
+                if len(stub_lines) >= i+INV_LINES_PER_STUB and stub_lines[i+INV_LINES_PER_STUB-1].get('header'):
+                    num_stub_lines = INV_LINES_PER_STUB-1 or INV_LINES_PER_STUB
+                else:
+                    num_stub_lines = INV_LINES_PER_STUB
+                stub_pages.append(stub_lines[i:i+num_stub_lines])
+                i += num_stub_lines
+
+        return stub_pages
 
 class AccountDiscountedPaymentsAllocation(models.Model):
     _name = 'account.payment.allocation'

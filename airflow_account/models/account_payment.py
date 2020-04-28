@@ -220,7 +220,7 @@ class AccountPayment(models.Model):
             page['partner_type'] = self.partner_type
             if is_discounted_payment:
                 for line in page['stub_lines']:
-                    if line['skip']:
+                    if line.get('skip'):
                         page['stub_lines'].remove(line)
         return pages
 

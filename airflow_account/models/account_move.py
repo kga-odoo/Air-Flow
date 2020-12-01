@@ -11,7 +11,6 @@ class AccountMove(models.Model):
         order_id = related_sols[0].order_id if related_sols else False
         return order_id
 
-    @api.multi
     def post(self):
 
         invoice = self._context.get('invoice', False)

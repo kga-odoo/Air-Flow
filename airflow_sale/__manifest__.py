@@ -36,8 +36,6 @@ Task ID: 1969736 (Most of the dev is in airflow_stock)
         # server actions
         'data/sale_actions.xml',
     ],
-    'demo': [],
-    'qweb': [],
     'installable': True,
     'application': False,
     'auto_install': False,

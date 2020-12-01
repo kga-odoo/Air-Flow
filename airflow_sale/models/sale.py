@@ -16,7 +16,6 @@ class SaleOrderLine(models.Model):
     analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account')
     tag = fields.Char(string='Tag')
 
-    @api.multi
     def _prepare_invoice_line(self, qty):
         res = super(SaleOrderLine, self)._prepare_invoice_line(qty)
         res['account_analytic_id'] = self.analytic_account_id.id or self.order_id.analytic_account_id.id

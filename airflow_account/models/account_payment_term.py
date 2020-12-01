@@ -11,5 +11,5 @@ class AccountPaymentTerm(models.Model):
     _inherit = "account.payment.term"
     
     # early_discount = fields.Integer(string='Early Discount(%)')
-    early_discount_per = fields.Float(string='Early Discount (%)', digits=dp.get_precision('Discount'), default=0.0)
+    early_discount_per = fields.Float(string='Early Discount (%)', digits='Discount', default=0.0)
     early_payment_days = fields.Integer(string='Early Payment Days')

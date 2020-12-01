@@ -9,7 +9,7 @@
             <xpath expr="//field[@name='order_line']//tree//field[@name='analytic_tag_ids']" position="before">
                 <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']//form//field[@name='layout_category_id']" position="after">
+            <xpath expr="//field[@name='order_line']//form//field[@name='invoice_status']" position="before">
                 <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
             </xpath>
         </field>

@@ -73,18 +73,16 @@ Task ID: 1969736
 
     """,
     "category": "Custom Development",
-    "depends": ["airflow_sale", "sale_stock", "delivery", "web"],
+    "depends": ["airflow_sale", "airflow_account","sale_stock", "delivery", "web"],
     "data": [
         # Views
         "views/sale_order_views.xml",
-        "views/purchase_order_views.xml",
-        "views/stock_picking_views.xml",
+        # "views/purchase_order_views.xml",
+        # "views/stock_picking_views.xml",
         # Reports
-        "report/report_deliveryslip.xml",
-        "report/report_templates.xml",
+        # "report/report_deliveryslip.xml",
+        # "report/report_templates.xml",
     ],
-    "demo": [],
-    "qweb": [],
     "installable": True,
     "application": False,
     "auto_install": False,

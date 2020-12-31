@@ -77,11 +77,11 @@ Task ID: 1969736
     "data": [
         # Views
         "views/sale_order_views.xml",
-        # "views/purchase_order_views.xml",
-        # "views/stock_picking_views.xml",
+        "views/purchase_order_views.xml",
+        "views/stock_picking_views.xml",
         # Reports
-        # "report/report_deliveryslip.xml",
-        # "report/report_templates.xml",
+        "report/report_deliveryslip.xml",
+        "report/report_templates.xml",
     ],
     "installable": True,
     "application": False,

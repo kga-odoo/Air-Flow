@@ -12,7 +12,7 @@ class StockPicking(models.Model):
     item_count = fields.Float(
         sting="Item Count",
         compute="_compute_item_count",
-        digits=dp.get_precision("Product Unit of Measure"),
+        digits="Product Unit of Measure",
         store=True,
     )
     sales_rep = fields.Many2one(string="Sales Rep", related="sale_id.team_id")
@@ -25,8 +25,7 @@ class StockPicking(models.Model):
     
     # x_studio_field_bekml
     ship_attn = fields.Char(string='Ship Attn To', related='sale_id.ship_attn')
-    
-    @api.multi
+
     @api.depends("move_lines.product_uom_qty")
     def _compute_item_count(self):
         for picking in self:

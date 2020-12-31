@@ -278,14 +278,13 @@ class AccountDiscountedPaymentsAllocation(models.Model):
     _name = 'account.payment.allocation'
 
     payment_id = fields.Many2one('account.payment', string='Payment')
-    invoice_id = fields.Many2one('account.invoice', string='Invoice', required=True)
+    invoice_id = fields.Many2one('account.move', string='Invoice', required=True)
     residual = fields.Float(string='Amount Due')
     available_discount = fields.Float(string='Available Discount')
     total_to_pay = fields.Float(string='Total To Pay')
     total_paid = fields.Float(string='Total Paid', required=True)
     status = fields.Selection([('open', 'Open'), ('paid', 'Paid')], string='Invoice Status', required=True)
 
-    @api.multi
     @api.constrains('total_to_pay', 'total_paid')
     def _check_paid_amount(self):
         for allocation in self:

@@ -86,21 +86,21 @@ Custom modifications to the CUstomer Statement.
     'license': 'OEEL-1',
     'author': 'Odoo Inc',
     'version': '0.1',
-    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery', 'account_reports'],
+    'depends': ['sale_management', 'l10n_us_check_printing', 'delivery', 'account_reports', 'account_followup', 'snailmail_account_followup'],
     'data': [
 
         # security
         'security/ir.model.access.csv',
 
-        # wizard
+        # # wizard
         'wizard/payment_view.xml',
-        # views
+        # # views
         'views/account_payment_term_view.xml',
         'views/account_invoice_view.xml',
         'views/sale_order_view.xml',
         'views/report_followup.xml',
-
-        # reports
+        #
+        # # reports
         'report/print_check.xml',
         'report/account_invoice_report.xml',
 

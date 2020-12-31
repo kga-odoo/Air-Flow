@@ -69,7 +69,7 @@ class report_account_followup_report(models.AbstractModel):
 
         # Create new processed lines
         new_lines = []
-        inv_model = self.env["account.invoice"]
+        inv_model = self.env["account.move"]
         aml_model = self.env["account.move.line"]
         for aml_lines, total_lines in groups:
             amls = map(lambda line: line["id"], aml_lines)

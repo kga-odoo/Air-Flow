@@ -33,12 +33,6 @@ class AccountMove(models.Model):
     ship_date = fields.Date(related='sale_id.ship_date', string="Ship Date",store=True)
     ship_method = fields.Many2one('delivery.carrier', related='sale_id.ship_method', string="Shipping Method", store=True)
 
-    def action_reverse(self):
-        res = super(AccountMove, self.with_context(orig_sale_order=self.sale_id)).action_reverse()
-        print("i'm here")
-        return res
-
-
     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
     def _compute_sale_id(self):
         for account in self.filtered(lambda inv: inv.type == 'out_refund' or inv.type == 'out_invoice'):

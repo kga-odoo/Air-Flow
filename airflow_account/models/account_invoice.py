@@ -35,7 +35,7 @@ class AccountMove(models.Model):
 
     @api.depends('invoice_line_ids','invoice_line_ids.sale_line_ids','invoice_line_ids.sale_line_ids.order_id')
     def _compute_sale_id(self):
-        for account in self.filtered(lambda inv: inv.type == 'out_refund' or inv.type == 'out_invoice'):
+        for account in self:
             # Handle case of credit note
             # [MIG] now handled in reversal wizard
             # if account.type == 'out_refund':
@@ -44,6 +44,8 @@ class AccountMove(models.Model):
             if account.type == 'out_invoice':
                 sale_ids = account.mapped('invoice_line_ids.sale_line_ids.order_id')
                 account.sale_id = sale_ids[0] if sale_ids else False
+            else:
+                account.sale_id = False
 
     @api.depends('invoice_payment_term_id', 'invoice_payment_term_id.early_payment_days', 'invoice_date')
     def _compute_early_discount_payment_due_date(self):

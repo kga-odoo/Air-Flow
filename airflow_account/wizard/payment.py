@@ -104,6 +104,7 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
 class AccountDiscountedPaymentsAllocation(models.TransientModel):
     _name = 'account.discounted.payment.allocation'
     _inherit = 'account.payment.allocation'
+    _description = "Register discounted payments allocation"
 
     discounted_payment_id = fields.Many2one('account.register.discounted.payments', string='Discounted Payment')
     reference = fields.Char()

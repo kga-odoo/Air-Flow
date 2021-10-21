@@ -49,34 +49,48 @@
         </xpath>
 
         <xpath expr="//div[hasclass('address','row')]" position="replace">
-            <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
-            <t t-set="parent" t-value="(partner and partner.parent_id) or partner or False"/>
-            <div class="row mt16 mb16" name="customer_address">
-                <div class="col-8">
-                    <div>
-                        <span>
-                            <strong>Ship To Address:</strong>
-                        </span>
+        <!-- added t-if/t-else to make changes particular to delivery slip only -->
+            <t t-if="xmlid == 'stock.report_deliveryslip'">
+                <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
+                <t t-set="parent" t-value="(partner and partner.parent_id) or partner or False"/>
+                <div class="row mt16 mb16" name="customer_address">
+                    <div class="col-8">
+                        <div>
+                            <span>
+                                <strong>Ship To Address:</strong>
+                            </span>
+                        </div>
+                        <div t-if="partner" name="ship_to_address">
+                            <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
+                            <div t-esc="partner"
+                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                        </div>
                     </div>
-                    <div t-if="partner" name="ship_to_address">
-                        <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
-                        <div t-esc="partner"
-                             t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                    <div class="col-4 pull-right">
+                        <div>
+                            <span>
+                                <strong>Customer Address:</strong>
+                            </span>
+                        </div>
+                        <div t-if="parent" name="customer_address">
+                            <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
+                            <div t-esc="parent"
+                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                        </div>
                     </div>
                 </div>
-                <div class="col-4 pull-right">
-                    <div>
-                        <span>
-                            <strong>Customer Address:</strong>
-                        </span>
+            </t>
+            <t t-else>
+                <t t-if="information_block">
+                    <t t-set="colclass" t-value="'col-5 offset-1'"/>
+                        <div name="information_block" class="col-6">
+                            <t t-raw="information_block"/>
+                        </div>
+                </t>
+                    <div name="address" t-att-class="colclass">
+                        <t t-raw="address"/>
                     </div>
-                    <div t-if="parent" name="customer_address">
-                        <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
-                        <div t-esc="parent"
-                             t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
-                    </div>
-                </div>
-            </div>
+            </t>
         </xpath>
     </template>
 

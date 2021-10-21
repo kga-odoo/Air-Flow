@@ -28,7 +28,8 @@
                 </field>
 
                 <xpath expr="//form//sheet//notebook" position="before">
-                    <group string='Early Discount' attrs="{'invisible': [('state', '!=', 'draft')]}">
+                <!-- make this visible only in vendor bills ; vendor bills->in_invoice -->
+                    <group string='Early Discount' attrs="{'invisible': ['|', ('state', '!=', 'draft'),('type', '!=', 'in_invoice')]}">
                         <field name="early_discount_per" readonly="1"/>
                         <field name="ed_payment_due_date"/>
                         <field name="early_discount_amount"/>

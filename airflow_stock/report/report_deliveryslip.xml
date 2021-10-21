@@ -80,7 +80,7 @@
                     </div>
                 </div>
             </t>
-            <t t-else>
+            <t t-else="">
                 <t t-if="information_block">
                     <t t-set="colclass" t-value="'col-5 offset-1'"/>
                         <div name="information_block" class="col-6">

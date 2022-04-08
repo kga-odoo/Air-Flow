@@ -12,13 +12,13 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     # early_discount = fields.Integer(related='invoice_payment_term_id.early_discount', readonly=True)
-    early_discount_per = fields.Float(related='invoice_payment_term_id.early_discount_per', digits='Discount', readonly=True)
-    ed_payment_due_date = fields.Date(compute='_compute_early_discount_payment_due_date', string='Early Discount Payment Due Date', store=True)
-    early_discount_amount = fields.Float(compute='_compute_early_discount_amount', string='Early Payment Amount', store=True)
-    available_discount_hidden = fields.Float(string='Available Discount Force', copy=False)
-    do_not_update_discount = fields.Boolean(string='Do not update discount')
-    available_discount = fields.Float(compute='_compute_available_discount', inverse='_set_available_discount', string='Available Discount')
-    actual_discount = fields.Float(string='Actual Discount', copy=False)  # a discount is used at the Register Payment Discount screen
+    # early_discount_per = fields.Float(related='invoice_payment_term_id.early_discount_per', digits='Discount', readonly=True)
+    # ed_payment_due_date = fields.Date(compute='_compute_early_discount_payment_due_date', string='Early Discount Payment Due Date', store=True)
+    # early_discount_amount = fields.Float(compute='_compute_early_discount_amount', string='Early Payment Amount', store=True)
+    # available_discount_hidden = fields.Float(string='Available Discount Force', copy=False)
+    # do_not_update_discount = fields.Boolean(string='Do not update discount')
+    # available_discount = fields.Float(compute='_compute_available_discount', inverse='_set_available_discount', string='Available Discount')
+    # actual_discount = fields.Float(string='Actual Discount', copy=False)  # a discount is used at the Register Payment Discount screen
     paid_date = fields.Date(string='Paid Date')
 
     sale_id = fields.Many2one('sale.order',compute="_compute_sale_id", string="Original Sale Order",store=True)
@@ -47,42 +47,42 @@ class AccountMove(models.Model):
             else:
                 account.sale_id = False
 
-    @api.depends('invoice_payment_term_id', 'invoice_payment_term_id.early_payment_days', 'invoice_date')
-    def _compute_early_discount_payment_due_date(self):
-        for invoice in self.filtered(lambda i: i.invoice_date):
-            inv_date = fields.Date.from_string(invoice.invoice_date)
-            due_date = inv_date + relativedelta(days=invoice.invoice_payment_term_id.early_payment_days)
-            invoice.ed_payment_due_date = fields.Date.to_string(due_date)
+    # @api.depends('invoice_payment_term_id', 'invoice_payment_term_id.early_payment_days', 'invoice_date')
+    # def _compute_early_discount_payment_due_date(self):
+    #     for invoice in self.filtered(lambda i: i.invoice_date):
+    #         inv_date = fields.Date.from_string(invoice.invoice_date)
+    #         due_date = inv_date + relativedelta(days=invoice.invoice_payment_term_id.early_payment_days)
+    #         invoice.ed_payment_due_date = fields.Date.to_string(due_date)
 
-    @api.depends('invoice_payment_term_id', 'invoice_payment_term_id.early_discount_per', 'amount_residual', 'available_discount_hidden', 'do_not_update_discount')
-    def _compute_early_discount_amount(self):
-        for invoice in self:
-            today = fields.Date.context_today(self)
-            amount = invoice.amount_residual
-            if invoice.do_not_update_discount:
-                amount = amount - invoice.available_discount_hidden
-            elif invoice.ed_payment_due_date and invoice.ed_payment_due_date >= today:
-                amount = amount * (1 - (invoice.early_discount_per/100.0))
-            invoice.early_discount_amount = amount
+    # @api.depends('invoice_payment_term_id', 'invoice_payment_term_id.early_discount_per', 'amount_residual', 'available_discount_hidden', 'do_not_update_discount')
+    # def _compute_early_discount_amount(self):
+    #     for invoice in self:
+    #         today = fields.Date.context_today(self)
+    #         amount = invoice.amount_residual
+    #         if invoice.do_not_update_discount:
+    #             amount = amount - invoice.available_discount_hidden
+    #         elif invoice.ed_payment_due_date and invoice.ed_payment_due_date >= today:
+    #             amount = amount * (1 - (invoice.early_discount_per/100.0))
+    #         invoice.early_discount_amount = amount
 
-    def _compute_available_discount(self):
-        for invoice in self:
-            today = fields.Date.context_today(self)
-            discount = 0
-            if invoice.do_not_update_discount:
-                discount = invoice.available_discount_hidden
-            elif invoice.ed_payment_due_date and invoice.ed_payment_due_date >= today:
-                discount = invoice.amount_residual - invoice.early_discount_amount
-            invoice.available_discount = discount
+    # def _compute_available_discount(self):
+    #     for invoice in self:
+    #         today = fields.Date.context_today(self)
+    #         discount = 0
+    #         if invoice.do_not_update_discount:
+    #             discount = invoice.available_discount_hidden
+    #         elif invoice.ed_payment_due_date and invoice.ed_payment_due_date >= today:
+    #             discount = invoice.amount_residual - invoice.early_discount_amount
+    #         invoice.available_discount = discount
 
-    def _set_available_discount(self):
-        for invoice in self:
-            invoice.available_discount_hidden = invoice.available_discount
+    # def _set_available_discount(self):
+    #     for invoice in self:
+    #         invoice.available_discount_hidden = invoice.available_discount
 
-    @api.onchange('do_not_update_discount')
-    def onchange_do_not_update_discount(self):
-        if self.do_not_update_discount:
-            self.available_discount_hidden = self.available_discount
+    # @api.onchange('do_not_update_discount')
+    # def onchange_do_not_update_discount(self):
+    #     if self.do_not_update_discount:
+    #         self.available_discount_hidden = self.available_discount
 
     def write(self, vals):
         """Inherit to set the paid date"""

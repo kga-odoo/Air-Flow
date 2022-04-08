@@ -92,6 +92,8 @@
                     </div>
             </t>
         </xpath>
+
+        <xpath expr="//t[@t-set='colclass']" position="replace"/>
     </template>
 
     <template id="report_delivery_document_inherit_airflow" inherit_id="stock.report_delivery_document">

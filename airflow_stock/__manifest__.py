@@ -5,7 +5,7 @@
     "summary": "AirFlow Stock Customization",
     "license": "OEEL-1",
     "website": "https://www.odoo.com/page/sale",
-    "version": "1.0",
+    "version": "1.0.1",
     "author": "Odoo Inc",
     "description": """
 Air Flow Stock: Transfer and Delivery Slip Modifications

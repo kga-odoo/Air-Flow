@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<!-- <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
     <template id="ckus_stub_airflow" inherit_id="l10n_us_check_printing.ckus_stub">
@@ -24,4 +24,4 @@
         </xpath>
     </template>
 
-</odoo>
+</odoo> -->

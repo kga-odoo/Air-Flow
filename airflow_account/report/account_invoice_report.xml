@@ -3,7 +3,7 @@
     <data>
         <!-- Airflow Background header/footer layout -->
         <template id="external_layout_background_airflow">
-<!--            <div class="header o_background_header">-->
+           <!-- <div class="header o_background_header">-->
 <!--                <div class="pull-right">-->
 <!--                    <h3 class="mt0 text-right" t-field="company.report_header"/>-->
 <!--                </div>-->
@@ -37,7 +37,7 @@
 <!--                        <span class="topage"/>-->
 <!--                    </div>-->
 <!--                </div>-->
-<!--            </div>-->
+<!--            </div> -->
 
             <div t-attf-class="o_company_#{company.id}_layout header" t-att-style="report_header_style">
                 <div class="o_background_header">

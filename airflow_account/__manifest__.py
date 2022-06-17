@@ -90,18 +90,17 @@ Custom modifications to the CUstomer Statement.
     'data': [
 
         # security
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
 
-        # # wizard
-        # 'wizard/payment_view.xml',
-        # # views
-        # 'views/account_payment_term_view.xml',
+        # wizard
+        'wizard/payment_view.xml',
+        # views
+        'views/account_payment_term_view.xml',
         'views/account_invoice_view.xml',
         'views/sale_order_view.xml',
         'views/report_followup.xml',
-        #
-        # # reports
-        # 'report/print_check.xml',
+        # reports
+        'report/print_check.xml',
         'report/account_invoice_report.xml',
 
     ],

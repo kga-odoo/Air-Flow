@@ -4,8 +4,6 @@
 from odoo import api, models, fields, _
 from odoo.exceptions import UserError
 
-from odoo.addons import decimal_precision as dp
-
 
 class AccountRegisterDiscountedPayments(models.TransientModel):
     # """
@@ -34,6 +32,9 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
     invoice_ids = fields.Many2many(comodel_name='account.move', relation='account_invoice_payment_discount_trans',
                                    column1='discount_payment_id', column2='discount_invoice_id', string="Invoices",
                                    copy=False, readonly=True)
+    hide_payment_method = fields.Boolean(compute='_compute_hide_payment_method',
+                                         help="Technical field used to hide the payment method if the selected journal has only one available which is 'manual'",
+                                         store=True)
 
     @api.depends('payment_allocation_ids')
     def _compute_amount(self):
@@ -62,12 +63,11 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
             rec['payment_allocation_ids'] = [(0, 0, {
                 'invoice_id': i.id,
                 'residual': i.amount_residual,
-                'available_discount': i.available_discount,
-                'total_paid': i.amount_residual - i.available_discount,
+                'total_paid': i.amount_residual,
                 'status': 'paid',
                 # MIG, v13 reference field removed
                 # 'reference': i.reference,
-                'total_to_pay': i.amount_residual - i.available_discount}) for i in invoices]
+                'total_to_pay': i.amount_residual}) for i in invoices]
         return rec
 
     def _prepare_payment_vals(self, invoices):
@@ -82,7 +82,7 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
             gain_account_label=self.gain_account_label or _('Write-Off'),
             payment_allocation_ids=[(0, 0, {
                 'invoice_id': i.invoice_id.id,
-                'residual': i.amount_residual,
+                # 'residual': i.amount_residual,
                 'available_discount': i.available_discount,
                 'total_paid': i.total_paid,
                 'status': i.status,
@@ -95,10 +95,7 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
             raise UserError(_('You should have atleast one invoice selected'))
         if self.total_available_discount == 0 and self.total_paid_amount == 0 and self.payment_difference == 0:
             raise UserError(_('You can not paid zero amount'))
-        res = super(AccountRegisterDiscountedPayments, self).create_payments()
-        for allocation in self.mapped('payment_allocation_ids'):
-            allocation.invoice_id.actual_discount += allocation.available_discount
-        return res
+        return super(AccountRegisterDiscountedPayments, self).create_payments()
 
 
 class AccountDiscountedPaymentsAllocation(models.TransientModel):

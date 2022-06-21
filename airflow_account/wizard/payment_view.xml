@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Register payment from several invoices -->
-
+    <record id="action_account_discounted_payment_from_invoices" model="ir.actions.act_window">
+        <field name="name">Register Discounted Payment 2</field>
+        <field name="res_model">account.register.discounted.payments</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list</field>
+    </record>
     <record id="view_account_discounted_payment_from_invoices" model="ir.ui.view">
         <field name="name">account.register.discounted.payments.wizard</field>
         <field name="model">account.register.discounted.payments</field>
         <field name="arch" type="xml">
             <form string="Register Discounted Payment">
-                <field name="payment_type" invisible="1"/>
-                <field name="partner_type" invisible="1"/>
-                <field name="partner_id" invisible="1"/>
                 <group>
                     <group>
-                        <field name="journal_id" widget="selection"/>
+                        <field name="payment_method_id" widget="radio"/>
+                        <field name="group_payment"/>
                         <field name="hide_payment_method" invisible="1"/>
                         <field name="payment_method_id" widget="radio" attrs="{'invisible': [('hide_payment_method', '=', True)]}"/>
-                        <field name="payment_method_code" invisible="1"/>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="multi" invisible="1"/>
-                        <field name="amount" invisible="1"/>
                     </group>
                     <group>
+                        <field name="journal_id" widget="selection"/>
                         <field name="payment_date"/>
-                        <field name="communication"/>
                     </group>
                 </group>
                 <group string="Payment Allocations">
@@ -40,7 +40,8 @@
                 </group>
                 <group>
                     <group string="Write-Off Accounts">
-                        <field name="discount_account_id" attrs="{'required': [('total_available_discount', '>', 0)]}"/>
+                        <field name="discount_account_id"
+                               attrs="{'required': [('total_available_discount', '>', 0)]}"/>
                         <field name="discount_account_label"/>
                         <field name="gain_account_id" attrs="{'required': [('payment_difference', '>', 0)]}"/>
                         <field name="gain_account_label"/>
@@ -56,18 +57,7 @@
                     <button string='Validate' name="create_payments" type="object" class="btn-primary"/>
                     <button string="Cancel" class="btn-default" special="cancel"/>
                 </footer>
-           </form>
+            </form>
         </field>
     </record>
-
-    <act_window
-        id="action_account_discounted_payment_from_invoices"
-        name="Register Discounted Payment"
-        res_model="account.register.discounted.payments"
-        src_model="account.invoice"
-        view_mode="form"
-        multi="True"
-        target="new"
-        key2="client_action_multi"
-    />
 </odoo>

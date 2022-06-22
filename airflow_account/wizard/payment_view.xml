@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="action_account_discounted_payment_from_invoices" model="ir.actions.act_window">
-        <field name="name">Register Discounted Payment 2</field>
+        <field name="name">Register Discounted Payment</field>
         <field name="res_model">account.register.discounted.payments</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

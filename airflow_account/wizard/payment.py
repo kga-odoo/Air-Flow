@@ -36,6 +36,9 @@ class AccountRegisterDiscountedPayments(models.TransientModel):
                                          help="Technical field used to hide the payment method if the selected journal has only one available which is 'manual'",
                                          store=True)
 
+    line_ids = fields.Many2many('account.move.line', 'account_register_discounted_payments_move_line_rel', 'wizard_id',
+                                'line_id', string="Journal items", readonly=True, copy=False, )
+
     @api.depends('payment_allocation_ids')
     def _compute_amount(self):
         for p in self:

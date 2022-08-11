@@ -80,7 +80,7 @@ Task ID: 1969736
         "views/stock_picking_views.xml",
         # Reports
         "report/report_deliveryslip.xml",
-        "report/report_templates.xml",
+        # "report/report_templates.xml",
     ],
     "installable": True,
     "application": False,

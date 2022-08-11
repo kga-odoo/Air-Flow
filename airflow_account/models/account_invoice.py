@@ -32,7 +32,7 @@ class AccountMove(models.Model):
             # if account.type == 'out_refund':
             #     account.sale_id = account.refund_invoice_id.sale_id.id if account.refund_invoice_id.sale_id.id else False
             # Handle case of cust invoice
-            if account.type == 'out_invoice':
+            if account.move_type == 'out_invoice':
                 sale_ids = account.mapped('invoice_line_ids.sale_line_ids.order_id')
                 account.sale_id = sale_ids[0] if sale_ids else False
             else:

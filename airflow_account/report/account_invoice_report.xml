@@ -268,21 +268,6 @@
                 </div>
             </xpath>
 
-            <!-- Replace Tax label with Sales Tax or Tax Exempt in the case of 0 tax -->
-            <xpath expr="//div[hasclass('clearfix')]//t[@t-foreach='o.amount_by_group']" position="replace">
-                <tr style="border-bottom:1px solid #dddddd;">
-                    <t t-if="o.amount_tax == 0.0">
-                        <td><span>Tax Exempt</span></td>
-                    </t>
-                    <t t-else="">
-                        <td><span>Sales Tax</span></td>
-                    </t>
-                    <td class="text-right">
-                        <span t-field="o.amount_tax"/>
-                    </td>
-                </tr>
-            </xpath>
-
             <!-- Remove the Unit Amount and Taxes column -->
             <xpath expr="//table[@name='invoice_line_table']/thead/tr" position="replace">
                 <tr>

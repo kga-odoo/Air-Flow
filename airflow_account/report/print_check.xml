@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
     <template id="ckus_stub_airflow" inherit_id="l10n_us_check_printing.ckus_stub">
         <xpath expr="//table[hasclass('stub_lines')]//thead//tr//th[4]" position="attributes">
             <attribute name="t-if">page['partner_type'] == 'customer'</attribute>
@@ -23,5 +22,4 @@
             <td class="text-right"><t t-esc="stub_line['discount']"/></td>
         </xpath>
     </template>
-
 </odoo>

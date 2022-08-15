@@ -5,7 +5,7 @@
     "summary": "AirFlow Stock Customization",
     "license": "OEEL-1",
     "website": "https://www.odoo.com/page/sale",
-    "version": "1.0",
+    "version": "1.0.1",
     "author": "Odoo Inc",
     "description": """
 Air Flow Stock: Transfer and Delivery Slip Modifications
@@ -73,7 +73,7 @@ Task ID: 1969736
 
     """,
     "category": "Custom Development",
-    "depends": ["airflow_sale", "sale_stock", "delivery", "web"],
+    "depends": ["airflow_sale", "airflow_account","sale_stock", "delivery", "web"],
     "data": [
         # Views
         "views/sale_order_views.xml",
@@ -81,10 +81,8 @@ Task ID: 1969736
         "views/stock_picking_views.xml",
         # Reports
         "report/report_deliveryslip.xml",
-        "report/report_templates.xml",
+        # "report/report_templates.xml",
     ],
-    "demo": [],
-    "qweb": [],
     "installable": True,
     "application": False,
     "auto_install": False,

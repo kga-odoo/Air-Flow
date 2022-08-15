@@ -17,7 +17,6 @@ class RPCReport(models.Model):
     #     request.session.authenticate(db, self.env.user.login, password)
     #     root.session_store.save(request.session)
 
-    @api.multi
     def render_rpc(self, res_ids, data):
         # self._force_session_store()
         res = self.render(res_ids, data)

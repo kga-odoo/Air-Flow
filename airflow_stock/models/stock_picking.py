@@ -10,14 +10,14 @@ class StockPicking(models.Model):
     _inherit = "stock.picking"
 
     item_count = fields.Float(
-        sting="Item Count",
+        string="Item Count",
         compute="_compute_item_count",
         digits="Product Unit of Measure",
         store=True,
     )
     sales_rep = fields.Many2one(string="Sales Rep", related="sale_id.team_id")
     ship_method = fields.Many2one(
-        sting="Shipping Method", related="sale_id.ship_method"
+        string="Shipping Method", related="sale_id.ship_method"
     )
     proj_name = fields.Char(string="Project Name", related="sale_id.proj_name")
     job_code = fields.Char(string="Job Code", related="sale_id.job_code")

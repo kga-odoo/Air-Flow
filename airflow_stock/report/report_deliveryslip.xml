@@ -96,6 +96,10 @@
         <xpath expr="//t[@t-set='colclass']" position="replace"/>
     </template>
 
+    <template id="report_delivery_document2_delivery_inherit_airflow" inherit_id="delivery.report_delivery_document2">
+        <xpath expr="//p[@t-field='o.carrier_id']/../div[1]" position="replace"/>
+    </template>
+
     <template id="report_delivery_document_inherit_airflow" inherit_id="stock.report_delivery_document">
         <!-- Report-specific styles -->
         <xpath expr="//t[@t-set='o']" position="before">
@@ -461,19 +465,4 @@
             </div>
         </xpath>
     </template>
-
-    <template id="report_delivery_document2_delivery_inherit_airflow" inherit_id="delivery.report_delivery_document2">
-        <!-- Remove default Carrier column -->
-        <!--        <xpath expr="//th[contains(@t-if, 'o.carrier_id')]" position="replace"></xpath>-->
-        <!--        <xpath expr="//td[contains(@t-if, 'o.carrier_id')]" position="replace"></xpath>-->
-        <xpath expr="//p[@t-field='o.carrier_id']/../div[1]" position="replace"/>
-    </template>
-
-    <!-- Remove Customer Reference section in header (as it's displayed in the table above) -->
-    <template id="report_delivery_document_sale_stock_inherit_airflow"
-              inherit_id="sale_stock.report_delivery_document_inherit_sale_stock">
-        <xpath expr="//div[hasclass('row')][contains(@t-if, 'o.sudo().sale_id.client_order_ref')]"
-               position="replace"></xpath>
-    </template>
-
 </odoo>

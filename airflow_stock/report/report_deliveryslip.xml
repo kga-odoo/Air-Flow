@@ -9,12 +9,9 @@
 
     <template id="address_layout_inherit_airflow" inherit_id="web.address_layout">
         <xpath expr="//div[hasclass('address','row')]" position="before">
-            <!--            <t t-set="xml_id" t-value="xmlid"/>-->
             <t t-if="xmlid == 'stock.report_deliveryslip'">
-                <!--            <t t-if="doc_model == 'account.move'">-->
                 <div class="row mt16 mb16">
                     <div class="col-8">
-                        <!--                        <h1><span t-esc="xmlid"/></h1>-->
                         <h5>
                             <span>Project Name:</span>
                             <span t-field="o.proj_name"/>
@@ -49,7 +46,7 @@
         </xpath>
 
         <xpath expr="//div[hasclass('address','row')]" position="replace">
-        <!-- added t-if/t-else to make changes particular to delivery slip only -->
+            <!-- added t-if/t-else to make changes particular to delivery slip only -->
             <t t-if="xmlid == 'stock.report_deliveryslip'">
                 <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                 <t t-set="parent" t-value="(partner and partner.parent_id) or partner or False"/>
@@ -63,7 +60,7 @@
                         <div t-if="partner" name="ship_to_address">
                             <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
                             <div t-esc="partner"
-                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
                         </div>
                     </div>
                     <div class="col-4 pull-right">
@@ -75,7 +72,7 @@
                         <div t-if="parent" name="customer_address">
                             <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
                             <div t-esc="parent"
-                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
                         </div>
                     </div>
                 </div>
@@ -83,166 +80,31 @@
             <t t-else="">
                 <t t-if="information_block">
                     <t t-set="colclass" t-value="'col-5 offset-1'"/>
-                        <div name="information_block" class="col-6">
-                            <t t-raw="information_block"/>
-                        </div>
-                </t>
-                    <div name="address" t-att-class="colclass">
-                        <t t-raw="address"/>
+                    <div name="information_block" class="col-6">
+                        <t t-raw="information_block"/>
                     </div>
+                </t>
+                <div name="address" t-att-class="colclass">
+                    <t t-raw="address"/>
+                </div>
             </t>
         </xpath>
 
         <xpath expr="//t[@t-set='colclass']" position="replace"/>
-    </template>
 
-    <template id="report_delivery_document2_delivery_inherit_airflow" inherit_id="delivery.report_delivery_document2">
-        <xpath expr="//p[@t-field='o.carrier_id']/../div[1]" position="replace"/>
-    </template>
-
-    <template id="report_delivery_document_inherit_airflow" inherit_id="stock.report_delivery_document">
-        <!-- Report-specific styles -->
-        <xpath expr="//t[@t-set='o']" position="before">
-            <style>
-                .origin {
-                font-size: initial;
-                vertical-align: middle;
-                padding-bottom: 4px;
-                }
-                .line_below {
-                width: 100%;
-                border-bottom: 1px solid;
-                }
-                h4 {
-                padding: 1px;
-                margin: 0px;
-                }
-            </style>
-        </xpath>
-        <!-- Add row for Shipping Method and Sales Rep and Project Name -->
-        <!--        <xpath expr="//t[@name='partner_header']" position="replace">-->
-        <!--            <t t-set="address">-->
-        <!--                <div class="row mt16 mb16">-->
-        <!--                    <div class="col-8">-->
-        <!--                        <h4>-->
-        <!--                            <span>Project Name:</span>-->
-        <!--                            <span t-field="o.proj_name"/>-->
-        <!--                        </h4>-->
-        <!--                        <h4>-->
-        <!--                            <span>Ship Attn To:</span>-->
-        <!--                            <span t-field="o.ship_attn"/>-->
-        <!--                        </h4>-->
-        <!--                        <h4>-->
-        <!--                            <span>Customer PO:</span>-->
-        <!--                            <span t-field="o.cust_po"/>-->
-        <!--                        </h4>-->
-        <!--                    </div>-->
-
-        <!--                    <div class="col-4 pull-right">-->
-        <!--                        <div>-->
-        <!--                            <span>Sales Rep:</span>-->
-        <!--                            <span t-field="o.sales_rep"/>-->
-        <!--                        </div>-->
-        <!--                        <div>-->
-        <!--                            <span>Email:</span>-->
-        <!--                            <span t-esc="o.sales_rep.email" t-options='{"widget": "email"}'/>-->
-        <!--                        </div>-->
-        <!--                        <div>-->
-        <!--                            <span>Phone:</span>-->
-        <!--                            <span t-esc="o.sales_rep.phone" t-options='{"widget": "phone"}'/>-->
-        <!--                        </div>-->
-
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <div t-esc="partner"-->
-        <!--                     t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>-->
-        <!--            </t>-->
-        <!--        </xpath>-->
-        <!--        <xpath expr="//div[@name='customer_address']" position="before">-->
-        <!--          <div class="row mt16 mb16">-->
-        <!--	    <div class="col-xs-8">-->
-        <!--	      <h4>-->
-        <!--		<span>Project Name:</span>-->
-        <!--		<span t-field="o.proj_name" />-->
-        <!--              </h4>-->
-        <!--	      <h4>-->
-        <!--		<span>Ship Attn To:</span>-->
-        <!--		<span t-field="o.ship_attn" />-->
-        <!--              </h4>-->
-        <!--	      <h4>-->
-        <!--		<span>Customer PO:</span>-->
-        <!--		<span t-field="o.cust_po" />-->
-        <!--              </h4>-->
-        <!--	    </div>-->
-
-        <!--            <div class="col-xs-4 pull-right">-->
-        <!--              <div>-->
-        <!--                <span>Sales Rep:</span>-->
-        <!--                <span t-field="o.sales_rep"/>-->
-        <!--              </div>-->
-        <!--              <div>-->
-        <!--                <span>Email:</span>-->
-        <!--                <span t-esc="o.sales_rep.email" t-options='{"widget": "email"}'/>-->
-        <!--              </div>-->
-        <!--              <div>-->
-        <!--                <span>Phone:</span>-->
-        <!--                <span t-esc="o.sales_rep.phone" t-options='{"widget": "phone"}'/>-->
-        <!--              </div>-->
-
-        <!--            </div>-->
-        <!--          </div>-->
-        <!--        </xpath>-->
-        <!--                &lt;!&ndash; Replace address row with Ship To address and Customer Address &ndash;&gt;-->
-        <!--                <xpath expr="//div[@name='customer_address']" position="replace">-->
-        <!--                    <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>-->
-        <!--                    <t t-set="parent" t-value="(partner and partner.parent_id) or partner or False"/>-->
-        <!--                    <div class="row" name="customer_address">-->
-        <!--                        <div class="col-xs-4">-->
-        <!--                            <div>-->
-        <!--                                <span>-->
-        <!--                                    <strong>Ship To Address:</strong>-->
-        <!--                                </span>-->
-        <!--                            </div>-->
-        <!--                            <div t-if="partner" name="ship_to_address">-->
-        <!--        		        <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>-->
-        <!--                                <div t-esc="partner" t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-        <!--                        <div class="col-xs-4 pull-right">-->
-        <!--                            <div>-->
-        <!--                                <span>-->
-        <!--                                    <strong>Customer Address:</strong>-->
-        <!--                                </span>-->
-        <!--                            </div>-->
-        <!--                            <div t-if="parent" name="customer_address">-->
-        <!--        		      <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>-->
-        <!--                                <div t-esc="parent" t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                </xpath>-->
         <!-- Add origin after name -->
         <xpath expr="//div[hasclass('page')]//span[@t-field='o.name']" position="after">
             <span class="origin" t-if="o.origin" t-field="o.origin"/>
         </xpath>
-        <!-- Replace origin column in table with SO number (called Airflow Order #) -->
 
+        <!-- Replace origin column in table with SO number (called Airflow Order #) -->
         <xpath expr="//div[@name='div_origin']" position="replace">
             <div t-if="o.sale_id.name" class="col-auto" name="div_name">
                 <strong>Airflow Order #:</strong>
                 <p t-esc="o.sale_id.name.replace('SO', '')"/>
             </div>
         </xpath>
-        <!--        <xpath expr="//table//thead//th[@t-if='o.origin']" position="replace">-->
-        <!--            <th t-if="o.sale_id.name">-->
-        <!--                <strong>Airflow Order #</strong>-->
-        <!--            </th>-->
-        <!--        </xpath>-->
-        <!--        <xpath expr="//table//tbody//td[@t-if='o.origin']" position="replace">-->
-        <!--            <td t-if="o.sale_id.name">-->
-        <!--                <span t-esc="o.sale_id.name.replace('SO', '')"/>-->
-        <!--            </td>-->
-        <!--        </xpath>-->
+
         <!-- Remove time from date -->
         <xpath expr="//div[@name='div_sched_date']//p[@t-field='o.date_done']" position="attributes">
             <attribute name="t-options">{"widget": "date"}</attribute>
@@ -250,6 +112,7 @@
         <xpath expr="//div[@name='div_sched_date']//p[@t-field='o.scheduled_date']" position="attributes">
             <attribute name="t-options">{"widget": "date"}</attribute>
         </xpath>
+
         <!-- Add Cust Job #, Cust PO # and Shipping method (the custom field) to table -->
         <xpath expr="//div[@name='div_sched_date']" position="after">
             <div t-if="o.job_code" class="col-auto" name="div_cust_job">
@@ -264,27 +127,8 @@
                 <strong>Shipping Method:</strong>
                 <p t-field="o.ship_method"/>
             </div>
-            <!--            <th t-if="o.job_code">-->
-            <!--                <strong>Cust Job #</strong>-->
-            <!--            </th>-->
-            <!--            <th t-if="o.cust_po">-->
-            <!--                <strong>Cust PO #</strong>-->
-            <!--            </th>-->
-            <!--            <th t-if="o.ship_method">-->
-            <!--                <strong>Shipping Method</strong>-->
-            <!--            </th>-->
         </xpath>
-        <!--        <xpath expr="//td[@name='td_sched_date']" position="after">-->
-        <!--            <td t-if="o.job_code">-->
-        <!--                <span t-esc="o.job_code"/>-->
-        <!--            </td>-->
-        <!--            <td t-if="o.cust_po">-->
-        <!--                <span t-esc="o.cust_po"/>-->
-        <!--            </td>-->
-        <!--            <td t-if="o.ship_method">-->
-        <!--                <span t-field="o.ship_method"/>-->
-        <!--            </td>-->
-        <!--        </xpath>-->
+
         <!-- Overhaul the move lines tables -->
         <xpath expr="//table[@name='stock_move_table']" position="replace">
             <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
@@ -307,15 +151,9 @@
                         <th>
                             <strong>Product Description</strong>
                         </th>
-                        <!-- <th t-if="has_manufacturer"> -->
-                        <!--     <strong>Manufacturer</strong> -->
-                        <!-- </th> -->
                         <th t-if="has_tag">
                             <strong>Tag</strong>
                         </th>
-                        <!-- <th t-if="has_po_tag"> -->
-                        <!--     <strong>PO Tag</strong> -->
-                        <!-- </th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -339,15 +177,9 @@
                         <td>
                             <span t-field="move.product_description"/>
                         </td>
-                        <!-- <td t-if="has_manufacturer"> -->
-                        <!--     <span t-field="move.manufacturer"/> -->
-                        <!-- </td> -->
                         <td t-if="has_tag">
                             <span t-field="move.tag"/>
                         </td>
-                        <!-- <td t-if="has_po_tag"> -->
-                        <!--     <span t-field="move.po_tag"/> -->
-                        <!-- </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -378,15 +210,9 @@
                         <th>
                             <strong>Product Description</strong>
                         </th>
-                        <!-- <th t-if="has_manufacturer"> -->
-                        <!--     <strong>Manufacturer</strong> -->
-                        <!-- </th> -->
                         <th t-if="has_tag">
                             <strong>Tag</strong>
                         </th>
-                        <!-- <th t-if="has_po_tag"> -->
-                        <!--     <strong>PO Tag</strong> -->
-                        <!-- </th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -432,17 +258,10 @@
                         <td>
                             <span t-field="move_line.product_id.sudo().description_sale"/>
                         </td>
-                        <!-- Manufacturer -->
-                        <!-- <td t-if="has_manufacturer"> -->
-                        <!--     <span t-field="move_line.product_id.seller_ids.name"/> -->
-                        <!-- </td> -->
                         <!-- Tag -->
                         <td t-if="has_tag">
                             <span t-field="move_line.move_id.tag"/>
                         </td>
-                        <!-- <td t-if="has_po_tag"> -->
-                        <!--     <span t-field="move_line.move_id.po_tag"/> -->
-                        <!-- </td> -->
                     </tr>
                 </tbody>
             </table>

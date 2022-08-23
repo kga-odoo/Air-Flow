@@ -9,12 +9,9 @@
 
     <template id="address_layout_inherit_airflow" inherit_id="web.address_layout">
         <xpath expr="//div[hasclass('address','row')]" position="before">
-            <!--            <t t-set="xml_id" t-value="xmlid"/>-->
             <t t-if="xmlid == 'stock.report_deliveryslip'">
-                <!--            <t t-if="doc_model == 'account.move'">-->
                 <div class="row mt16 mb16">
                     <div class="col-8">
-                        <!--                        <h1><span t-esc="xmlid"/></h1>-->
                         <h5>
                             <span>Project Name:</span>
                             <span t-field="o.proj_name"/>
@@ -49,7 +46,7 @@
         </xpath>
 
         <xpath expr="//div[hasclass('address','row')]" position="replace">
-        <!-- added t-if/t-else to make changes particular to delivery slip only -->
+            <!-- added t-if/t-else to make changes particular to delivery slip only -->
             <t t-if="xmlid == 'stock.report_deliveryslip'">
                 <t t-set="partner" t-value="o.partner_id or (o.move_lines and o.move_lines[0].partner_id) or False"/>
                 <t t-set="parent" t-value="(partner and partner.parent_id) or partner or False"/>
@@ -63,7 +60,7 @@
                         <div t-if="partner" name="ship_to_address">
                             <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
                             <div t-esc="partner"
-                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
                         </div>
                     </div>
                     <div class="col-4 pull-right">
@@ -75,7 +72,7 @@
                         <div t-if="parent" name="customer_address">
                             <span t-esc="partner.parent_id.name if partner.parent_id else partner.name"/>
                             <div t-esc="parent"
-                                t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
+                                 t-options='{"widget": "contact", "fields": ["address", "phone"], "no_marker": True}'/>
                         </div>
                     </div>
                 </div>
@@ -83,16 +80,208 @@
             <t t-else="">
                 <t t-if="information_block">
                     <t t-set="colclass" t-value="'col-5 offset-1'"/>
-                        <div name="information_block" class="col-6">
-                            <t t-raw="information_block"/>
-                        </div>
-                </t>
-                    <div name="address" t-att-class="colclass">
-                        <t t-raw="address"/>
+                    <div name="information_block" class="col-6">
+                        <t t-raw="information_block"/>
                     </div>
+                </t>
+                <div name="address" t-att-class="colclass">
+                    <t t-raw="address"/>
+                </div>
             </t>
         </xpath>
 
         <xpath expr="//t[@t-set='colclass']" position="replace"/>
+
+        <!-- Add origin after name -->
+        <xpath expr="//div[hasclass('page')]//span[@t-field='o.name']" position="after">
+            <span class="origin" t-if="o.origin" t-field="o.origin"/>
+        </xpath>
+
+        <!-- Replace origin column in table with SO number (called Airflow Order #) -->
+        <xpath expr="//div[@name='div_origin']" position="replace">
+            <div t-if="o.sale_id.name" class="col-auto" name="div_name">
+                <strong>Airflow Order #:</strong>
+                <p t-esc="o.sale_id.name.replace('SO', '')"/>
+            </div>
+        </xpath>
+
+        <!-- Remove time from date -->
+        <xpath expr="//div[@name='div_sched_date']//p[@t-field='o.date_done']" position="attributes">
+            <attribute name="t-options">{"widget": "date"}</attribute>
+        </xpath>
+        <xpath expr="//div[@name='div_sched_date']//p[@t-field='o.scheduled_date']" position="attributes">
+            <attribute name="t-options">{"widget": "date"}</attribute>
+        </xpath>
+
+        <!-- Add Cust Job #, Cust PO # and Shipping method (the custom field) to table -->
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+            <div t-if="o.job_code" class="col-auto" name="div_cust_job">
+                <strong>Cust Job #:</strong>
+                <p t-field="o.job_code"/>
+            </div>
+            <div t-if="o.cust_po" class="col-auto" name="div_cust_po">
+                <strong>Cust PO #:</strong>
+                <p t-field="o.cust_po"/>
+            </div>
+            <div t-if="o.ship_method" class="col-auto" name="div_ship_method">
+                <strong>Shipping Method:</strong>
+                <p t-field="o.ship_method"/>
+            </div>
+        </xpath>
+
+        <!-- Overhaul the move lines tables -->
+        <xpath expr="//table[@name='stock_move_table']" position="replace">
+            <t t-set="lines" t-value="o.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+            <t t-set="has_tag" t-value="any([move.tag for move in lines])"/>
+            <t t-set="has_po_tag" t-value="any([move.po_tag for move in lines])"/>
+            <t t-set="has_model" t-value="any([move.product_model for move in lines])"/>
+            <t t-set="has_manufacturer" t-value="any([move.manufacturer for move in lines])"/>
+            <table class="table table-condensed mt48" t-if="o.state!='done'">
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>Qty</strong>
+                        </th>
+                        <th t-if="has_model">
+                            <strong>Model</strong>
+                        </th>
+                        <th>
+                            <strong>Item #</strong>
+                        </th>
+                        <th>
+                            <strong>Product Description</strong>
+                        </th>
+                        <th t-if="has_tag">
+                            <strong>Tag</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="lines.sorted(lambda l: l.id)" t-as="move">
+                        <td>
+                            <span t-field="move.product_uom_qty"/>
+                            <span t-field="move.product_uom"/>
+                        </td>
+                        <td t-if="has_model">
+                            <span t-field="move.product_model"/>
+                        </td>
+                        <td>
+                            <span t-field="move.product_id"/>
+                            <p t-if="o.picking_type_code == 'outgoing'">
+                                <span t-field="move.product_id.sudo().description_pickingout"/>
+                            </p>
+                            <p t-if="o.picking_type_code == 'incoming'">
+                                <span t-field="move.product_id.sudo().description_pickingin"/>
+                            </p>
+                        </td>
+                        <td>
+                            <span t-field="move.product_description"/>
+                        </td>
+                        <td t-if="has_tag">
+                            <span t-field="move.tag"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+        <!-- Overhaul move lines table when state == done -->
+        <xpath expr="//table[@name='stock_move_line_table']" position="replace">
+            <table class="table table-condensed mt48" t-if="o.move_line_ids and o.state=='done'">
+                <t t-set="has_tag" t-value="any([move_line.move_id.tag for move_line in o.move_line_ids])"/>
+                <t t-set="has_model" t-value="any([move_line.product_id.model for move_line in o.move_line_ids])"/>
+                <t t-set="has_serial_number" t-value="o.move_line_ids.mapped('lot_id')"
+                   groups="stock.group_production_lot"/>
+                <t t-set="has_manufacturer"
+                   t-value="any([move_line.product_id.seller_ids.name for move_line in o.move_line_ids])"/>
+                <thead>
+                    <tr>
+                        <th>
+                            <strong>Qty</strong>
+                        </th>
+                        <th t-if="has_model">
+                            <strong>Model</strong>
+                        </th>
+                        <th>
+                            <strong>Item #</strong>
+                        </th>
+                        <th name="lot_serial" t-if="has_serial_number">
+                            Lot/Serial Number
+                        </th>
+                        <th>
+                            <strong>Product Description</strong>
+                        </th>
+                        <th t-if="has_tag">
+                            <strong>Tag</strong>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-foreach="o.move_line_ids.sorted(key=lambda line: line.id)" t-as="move_line">
+                        <!-- Quantity -->
+                        <td class="text-center">
+                            <span t-field="move_line.qty_done"/>
+                            <span t-field="move_line.product_uom_id"/>
+                        </td>
+                        <!-- Model -->
+                        <td t-if="has_model">
+                            <span t-field="move_line.product_id.model"/>
+                        </td>
+                        <!-- Item # -->
+                        <td>
+                            <span t-field="move_line.product_id"/>
+                            <p t-if="o.picking_type_code == 'outgoing'">
+                                <span t-field="move_line.product_id.sudo().description_pickingout"/>
+                            </p>
+                            <p t-if="o.picking_type_code == 'incoming'">
+                                <span t-field="move_line.product_id.sudo().description_pickingin"/>
+                            </p>
+                        </td>
+                        <!-- Lot/Serial Number -->
+                        <td t-if="has_serial_number">
+                            <table width="100%">
+                                <tr>
+                                    <td>
+                                        <span t-field="move_line.lot_id"/>
+                                        <t t-if="not move_line.lot_id">
+                                            <span t-field="move_line.lot_name"/>
+                                        </t>
+                                    </td>
+                                    <td name="lot_qty">
+                                        <t t-if="move_line.product_qty">
+                                            <span t-field="move_line.product_qty"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <!-- Product Description -->
+                        <td>
+                            <span t-field="move_line.product_id.sudo().description_sale"/>
+                        </td>
+                        <!-- Tag -->
+                        <td t-if="has_tag">
+                            <span t-field="move_line.move_id.tag"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </xpath>
+        <!-- Add Sign, Date and Print spaces -->
+        <xpath expr="//div[hasclass('page')]" position="inside">
+            <div class="row mt32" name="signature">
+                <div class="col-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Sign</span>
+                </div>
+                <div class="col-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Print</span>
+                </div>
+                <div class="col-4">
+                    <div class="line_below">&#160;</div>
+                    <span>Date</span>
+                </div>
+            </div>
+        </xpath>
     </template>
 </odoo>

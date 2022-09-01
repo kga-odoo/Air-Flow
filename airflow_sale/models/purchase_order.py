@@ -17,7 +17,7 @@ class PurchaseOrder(models.Model):
             else:
                 purchase.sale_order_id = False
 
-    def action_view_invoice(self):
-        result = super(PurchaseOrder, self).action_view_invoice()
+    def action_view_invoice(self, invoices=False):
+        result = super(PurchaseOrder, self).action_view_invoice(invoices)
         result['context']['default_orig_purchase_id'] = self.id
         return result

@@ -18,6 +18,7 @@ class PurchaseOrder(models.Model):
                 purchase.sale_order_id = False
 
     def action_view_invoice(self, invoices=False):
+        self.env.context = dict(self._context)
+        self.env.context.update({'default_orig_purchase_id': self.id})
         result = super(PurchaseOrder, self).action_view_invoice(invoices)
-        result['context']['default_orig_purchase_id'] = self.id
         return result

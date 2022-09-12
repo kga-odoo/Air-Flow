@@ -2,24 +2,24 @@
 <odoo>
     <template id="ckus_stub_airflow" inherit_id="l10n_us_check_printing.ckus_stub">
         <xpath expr="//table[hasclass('stub_lines')]//thead//tr//th[4]" position="attributes">
-            <attribute name="t-if">page['partner_type'] == 'customer'</attribute>
+            <attribute name="t-if">page.get('partner_type') == 'customer'</attribute>
         </xpath>
         <xpath expr="//table[hasclass('stub_lines')]//thead//tr//th[4]" position="before">
             <th class="text-right">Discount</th>
         </xpath>
         <xpath expr="//table[hasclass('stub_lines')]//tbody//t[2]//tr//td[5]" position="replace">
-            <t t-if="page['is_discounted_payment']">
-                <td class="text-right"><t t-esc="stub_line['payment_amount']"/></td>
+            <t t-if="page.get('is_discounted_payment')">
+                <td class="text-right"><t t-esc="stub_line.get('payment_amount')"/></td>
             </t>
             <t t-else="">
-                <td class="text-right"><t t-esc="stub_line['amount_paid']"/></td>
+                <td class="text-right"><t t-esc="stub_line.get('amount_paid')"/></td>
             </t>
         </xpath>
         <xpath expr="//table[hasclass('stub_lines')]//tbody//t[2]//tr//td[4]" position="attributes">
-            <attribute name="t-if">page['partner_type'] == 'customer'</attribute>
+            <attribute name="t-if">page.get('partner_type') == 'customer'</attribute>
         </xpath>
         <xpath expr="//table[hasclass('stub_lines')]//tbody//t[2]//tr//td[4]" position="before">
-            <td class="text-right"><t t-esc="stub_line['discount']"/></td>
+            <td class="text-right"><t t-esc="stub_line.get('discount')"/></td>
         </xpath>
     </template>
 </odoo>

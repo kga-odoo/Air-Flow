@@ -94,7 +94,7 @@
 
         <!-- Add origin after name -->
         <xpath expr="//div[@name='address']" position="after">
-            <span class="origin" t-if="o.origin" t-field="o.origin"/>
+            <span class="origin" t-if="o.invoice_origin" t-field="o.invoice_origin"/>
         </xpath>
     </template>
 </odoo>

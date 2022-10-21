@@ -187,13 +187,13 @@
             <xpath expr="//t[@t-if='company.external_report_layout_id']" position="replace">
                 <t t-set="layout" t-value="company.external_report_layout_id.key or 'web.external_layout_standard'"/>
                 <t t-if="doc_model == 'account.move' or env.context.get('customer_statement')">
-                    <t t-if="layout == 'web.external_layout_background'">
+                    <t t-if="layout == 'web.external_layout_striped'">
                         <t t-call="airflow_account.external_layout_background_airflow"><t t-raw="0"/></t>
                     </t>
                     <t t-elif="layout == 'web.external_layout_boxed'">
                         <t t-call="airflow_account.external_layout_boxed_airflow"><t t-raw="0"/></t>
                     </t>
-                    <t t-elif="layout == 'web.external_layout_clean'" >
+                    <t t-elif="layout == 'web.external_layout_bold'" >
                         <t t-call="airflow_account.external_layout_clean_airflow"><t t-raw="0"/></t>
                     </t>
                     <t t-elif="layout == 'web.external_layout_standard'">
@@ -201,7 +201,7 @@
                     </t>
                     <t t-else="else">
                       <t t-if="company.external_report_layout_id" t-call="{{company.external_report_layout_id.key}}"><t t-raw="0"/></t>
-                      <t t-else="else" t-call="web.external_layout_standard"><t t-raw="0"/></t>
+                      <t t-else="else" t-call="airflow_account.external_layout_standard_airflow"><t t-raw="0"/></t>
                     </t>
                 </t>
                 <t t-else="else">
@@ -215,6 +215,7 @@
         <!-- Modifications done to the invoice report itself -->
         <template id="sale_report_invoice_document_inherit_airflow" inherit_id="sale.report_invoice_document_inherit_sale">
             <!-- replace with billing address -->
+            <xpath expr="//div[@t-field='o.partner_id']" position="replace"/>
             <xpath expr="//t[@t-if='o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)']" position="replace">
                 <div class="row mt16 mb16" name="customer_address">
                     <div class="col-8 border">
@@ -254,9 +255,9 @@
                     <strong>Shipping Method:</strong>
                     <p class="m-0" t-field="o.ship_method"/>
                 </div>
-                <div class="col-auto mw-100 mb-2" t-if="o.proj_manager">
+                <div class="col-auto mw-100 mb-2" t-if="o.proj_manager_name">
                     <strong>Project Manager:</strong>
-                    <p class="m-0" t-field="o.proj_manager"/>
+                    <p class="m-0" t-field="o.proj_manager_name"/>
                 </div>
                 <div class="col-auto mw-100 mb-2" t-if="o.proj_name">
                     <strong>Project Name:</strong>

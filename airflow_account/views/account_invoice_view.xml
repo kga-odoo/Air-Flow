@@ -6,13 +6,12 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             <field name="ref" position="after">
-                <field name="proj_manager_name"/>
-                <field name="proj_name"/>
+                <field name="move_type" invisible="1"/>
+                <field name="proj_manager_name" attrs="{'invisible': [('move_type','!=','out_invoice')]}"/>
+                <field name="proj_name" attrs="{'invisible': [('move_type','!=','out_invoice')]}"/>
+                <field name="ship_date" attrs="{'invisible': [('move_type','!=','out_invoice')]}"/>
+                <field name="ship_method" attrs="{'invisible': [('move_type','!=','out_invoice')]}"/>
             </field>
-            <!--<field name="company_id" position="after">
-                <field name="ship_date"/>
-                <field name="ship_method"/>
-            </field>-->
             <field name="date" position="after">
                 <field name="paid_date" attrs="{'readonly': [('state', '!=', 'paid')]}"/>
             </field>

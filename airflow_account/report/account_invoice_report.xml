@@ -229,9 +229,9 @@
                     <strong>Shipping Method:</strong>
                     <p t-field="o.ship_method"/>
                 </div>
-                <div class="col-xs-2" t-if="o.proj_manager">
+                <div class="col-xs-2" t-if="o.proj_manager_name">
                     <strong>Project Manager:</strong>
-                    <p t-field="o.proj_manager"/>
+                    <p t-field="o.proj_manager_name"/>
                 </div>
                 <div class="col-xs-2" t-if="o.proj_name">
                     <strong>Project Name:</strong>

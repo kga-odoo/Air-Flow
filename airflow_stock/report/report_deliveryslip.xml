@@ -104,27 +104,21 @@
             <attribute name="t-options">{"widget": "date"}</attribute>
         </xpath>
         <!-- Add Cust Job #, Cust PO # and Shipping method (the custom field) to table -->
-        <xpath expr="//th[@name='th_sm_quantity']" position="after">
-            <th t-if="o.job_code">
-                <strong>Cust Job #</strong>
-            </th>
-            <th t-if="o.cust_po">
-                <strong>Cust PO #</strong>
-            </th>
-            <th t-if="o.ship_method">
-                <strong>Shipping Method</strong>
-            </th>
-        </xpath>
-        <xpath expr="//td[last()]" position="after">
-            <td t-if="o.job_code">
-                <span t-esc="o.job_code"/>
-            </td>
-            <td t-if="o.cust_po">
-                <span t-esc="o.cust_po"/>
-            </td>
-            <td t-if="o.ship_method">
-                <span t-field="o.ship_method"/>
-            </td>
+        <xpath expr="//div[hasclass('row', 'mt32', 'mb32')]" position="after">
+            <div class="row mt32 mb32">
+                <div t-if="o.origin" class="col-auto" name="div_job_code">
+                    <strong>Cust Job #</strong>
+                    <p t-esc="o.job_code"/>
+                </div>
+                <div t-if="o.origin" class="col-auto" name="div_cust_po">
+                    <strong>Cust PO #</strong>
+                    <p t-esc="o.cust_po"/>
+                </div>
+                <div t-if="o.origin" class="col-auto" name="div_ship_method">
+                    <strong>Shipping Method</strong>
+                    <p t-if="o.ship_method" t-esc="o.ship_method.name"/>
+                </div>
+            </div>
         </xpath>
         <!-- Overhaul the move lines tables -->
         <xpath expr="//tr[@t-as='move']/ancestor::table" position="replace">

@@ -50,19 +50,20 @@ class AccountMove(models.Model):
         self._update_name_from_origin()
 
     def _update_name_from_origin(self):
-        for invoice in self:
-            if invoice.move_type == 'out_invoice' and invoice.invoice_origin:
-                order_id = self._get_invoice_order(invoice)
+        for move in self:
+            if move.move_type == 'out_invoice' and move.invoice_origin:
+                order_id = self._get_invoice_order(move)
                 if order_id:
                     order_id.write({'number_of_invoices': order_id.number_of_invoices + 1})
                     seq = order_id.number_of_invoices
-                    invoice.name = invoice.invoice_origin[2:] + '{0:02d}'.format(
-                        seq) if invoice.invoice_origin.startswith('SO') \
-                        else invoice.invoice_origin + '{0:02d}'.format(seq)
+                    move.name = move.invoice_origin[2:] + '{0:02d}'.format(
+                        seq) if move.invoice_origin.startswith('SO') \
+                        else move.invoice_origin + '{0:02d}'.format(seq)
 
-            if invoice.move_type == 'out_refund' and invoice.reversed_entry_id and invoice.reversed_entry_id.name:
-                order_id = self._get_invoice_order(invoice.reversed_entry_id)
+            if move.move_type == 'out_refund' and move.reversed_entry_id and move.reversed_entry_id.name and move.state == 'posted':
+                order_id = self._get_invoice_order(move.reversed_entry_id)
                 if order_id:
-                    order_id.write({'number_of_credit_notes': order_id.number_of_credit_notes + 1})
-                    seq = order_id.number_of_credit_notes
-                    invoice.name = invoice.reversed_entry_id.name[:-2] + 'CM{0:01d}'.format(seq)
+                    order_id.number_of_credit_notes = order_id.number_of_credit_notes + 1
+                    move.name = 'RINV/%s/%sCM%s' % (
+                        fields.Datetime.now().year, move.reversed_entry_id.name[:-2],
+                        str(order_id.number_of_credit_notes),)

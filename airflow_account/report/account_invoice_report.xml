@@ -216,9 +216,9 @@
         <template id="sale_report_invoice_document_inherit_airflow" inherit_id="sale.report_invoice_document_inherit_sale">
             <!-- replace with billing address -->
             <xpath expr="//div[@t-field='o.partner_id']" position="replace"/>
-            <xpath expr="//t[@t-if='o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)']" position="replace">
-                <div class="row mt16 mb16" name="customer_address">
-                    <div class="col-8 border">
+            <xpath expr="//div[hasclass('page')]/h2" position="before">
+                <div class="row" name="customer_address">
+                    <div class="col-6">
                         <div>
                             <span>
                                 <strong>Customer Address:</strong>
@@ -228,14 +228,16 @@
                             <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}" groups="sale.group_delivery_invoice_address"/>
                         </div>
                     </div>
-                    <div class="col-4 pull-right border">
-                        <div>
-                            <span>
-                                <strong>Ship To Address:</strong>
-                            </span>
-                        </div>
-                        <div groups="sale.group_delivery_invoice_address">
-                            <div t-field="o.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                    <div class="col-6">
+                        <div class="pull-right">
+                            <div>
+                                <span>
+                                    <strong>Ship To Address:</strong>
+                                </span>
+                            </div>
+                            <div groups="sale.group_delivery_invoice_address">
+                                <div t-field="o.partner_shipping_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                            </div>
                         </div>
                     </div>
                 </div>

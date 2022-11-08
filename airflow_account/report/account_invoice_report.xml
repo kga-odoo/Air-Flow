@@ -216,6 +216,7 @@
         <template id="sale_report_invoice_document_inherit_airflow" inherit_id="sale.report_invoice_document_inherit_sale">
             <!-- replace with billing address -->
             <xpath expr="//div[@t-field='o.partner_id']" position="replace"/>
+            <xpath expr="//t[@t-if='o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)']" position="replace"/>
             <xpath expr="//div[hasclass('page')]/h2" position="before">
                 <div class="row" name="customer_address">
                     <div class="col-6">

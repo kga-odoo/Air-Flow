@@ -19,7 +19,7 @@ class RPCReport(models.Model):
 
     def render_rpc(self, res_ids, data):
         # self._force_session_store()
-        res = self.render(res_ids, data)
+        res = self._render(res_ids, data)
         if isinstance(res, tuple):
             return base64.b64encode(res[0]), res[1]
         else:
